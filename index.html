@@ -204,7 +204,7 @@ d3.csv("neighbors.csv", function(data) {
   function containsObject(obj, list) {
     var i;
     for (i = 0; i < list.length; i++) {
-        if (list[i] === obj) {
+        if ((list[i].target === obj.target && list[i].source == obj.source) || (list[i].source === obj.target && list[i].target == obj.source)) {
             return true;
         }
     }
@@ -225,7 +225,7 @@ d3.csv("neighbors.csv", function(data) {
         strength: 0.7 // Set the desired strength for the new links
       };
     });
-
+    console.log(selectedNodeLinks);
     // Update the links array with the new links
     var newLinks = [];
     for (let i = 0; i < links.length; i++) {
