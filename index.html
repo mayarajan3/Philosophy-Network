@@ -167,10 +167,10 @@ d3.csv("neighbors.csv", function(data) {
             .attr("id", "image-" + nodes[y].label)
             .append("svg:image")
             .attr("xlink:href", "images/" + nodes[y].label + ".jpg")
-            .attr("width", 20)
-            .attr("height", 20)
-            .attr("x", 0.5)
-            .attr("y", 0.5);
+            .attr("width", 30)
+            .attr("height", 30)
+            .attr("x", -4)
+            .attr("y", -5);
   }
 
   var linkElements = svg.append("g")
