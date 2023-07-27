@@ -115,11 +115,13 @@ d3.csv("neighbors.csv", function(data) {
       console.log(dictNeighbors[philosophers[k]][j]);
       console.log(dictPhil);
       if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
-        links.push({
-          target: dictPhil[dictNeighbors[philosophers[k]][j]],
-          source: dictPhil[philosophers[k]],
-          strength: 0.7
-        });
+        if ((typeof dictPhil[dictNeighbors[philosophers[k]][j]] == 'number') && (typeof dictPhil[philosophers[k]] == 'number')) {
+          links.push({
+            target: dictPhil[dictNeighbors[philosophers[k]][j]],
+            source: dictPhil[philosophers[k]],
+            strength: 0.7
+          });
+        }
       }
     }
   }
@@ -138,8 +140,8 @@ d3.csv("neighbors.csv", function(data) {
     .strength(function (link) { return link.strength })
 
   var simulation = d3
-    .forceSimulation(nodes)
-    .force('link', d3.forceLink().links(links))
+    .forceSimulation()
+    .force('link', linkForce)
     .force('charge', d3.forceManyBody().strength(-120))
     .force('center', d3.forceCenter(width / 2, height / 2))
 
@@ -201,8 +203,8 @@ d3.csv("neighbors.csv", function(data) {
       .attr('x2', function (link) { return link.target.x || 0})
       .attr('y2', function (link) { return link.target.y || 0})
   })
-  // console.log(links);
-  // simulation.force("link").links(links)
+
+  simulation.force("link").links(links)
 });
 
 
