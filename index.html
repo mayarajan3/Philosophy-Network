@@ -41,29 +41,31 @@ var links = [];
 let i = 0;
 
 d3.csv("neighbors.csv", function(data) {
-  console.log(data);
-    neighbors = data.neighbors;
-    philosopher = data.philosopher;
-    nodes.push({
-      id: data.philosopher,
-      group: 0,
-      label: data.philosopher,
-      level: 1
-    });
-    console.log(neighbors)
+  for (var k = 0; k < data.length; k++) {
+      console.log(data[k]);
+      neighbors = data[k].neighbors;
+      philosopher = data[k].philosopher;
+      nodes.push({
+        id: data.philosopher,
+        group: 0,
+        label: data.philosopher,
+        level: 1
+      });
+      console.log(neighbors)
 
-    str = neighbors.substring(1, str.length - 1); // cut out the brackets
-    neighbors = str.split(",");
-    for (let j = 0; j < neighbors.length; j++) {
-      if (neighbors[j] !== philosopher) {
-        links.push({
-          target: neighbors[j],
-          source: data.philosopher,
-          strength: 1
-        });
+      str = neighbors.replace("\'", "").substring(1, str.length - 1); // cut out the brackets
+      neighbors = str.split(",");
+      for (let j = 0; j < neighbors.length; j++) {
+        if (neighbors[j] !== philosopher) {
+          links.push({
+            target: neighbors[j],
+            source: data.philosopher,
+            strength: 1
+          });
+        }
       }
-    }
-    i = i + 1;
+      i = i + 1;
+  }
 });
 
 function getNeighbors(node) {
