@@ -78,6 +78,9 @@ for (var k = 0; k < philosophers.length; k++) {
   }
 }
 
+console.log(nodes);
+console.log(links);
+
 function getNeighbors(node) {
   return links.reduce(function (neighbors, link) {
       if (link.target.id === node.id) {
