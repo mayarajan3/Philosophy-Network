@@ -62,11 +62,7 @@ function isNeighborLink(node, link) {
 
 
 function getNodeColor(node, neighbors) {
-  if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
-    return node.level === 1 ? 'blue' : 'green'
-  }
-
-  return node.level === 1 ? 'red' : 'gray'
+  return "url(#image-" + node.label + ")";
 }
 
 
@@ -161,7 +157,21 @@ d3.csv("neighbors.csv", function(data) {
     node.fy = null
   })
 
+  for (let y = 0; y < nodes.length; y++) {
+    var defs = svg.append("svg:defs");
 
+     defs.append("svg:pattern")
+            .attr("width", 1)
+            .attr("height", 1)
+            //.attr("patternUnits", "userSpaceOnUse")
+            .attr("id", "image-" + nodes[y].label)
+            .append("svg:image")
+            .attr("xlink:href", "images/" + nodes[y].label)
+            .attr("width", 48)
+            .attr("height", 48)
+            .attr("x", 0)
+            .attr("y", 0);
+  }
 
   var linkElements = svg.append("g")
     .attr("class", "links")
