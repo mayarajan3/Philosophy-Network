@@ -57,9 +57,9 @@ d3.csv("neighbors.csv", function(data) {
 
       console.log(neighbors)
 
-      str = neighbors.replace("\'", "").substring(1, neighbors.length - 1); // cut out the brackets
-      neighbors = str.split(",");
-      dictPhil[philosopher] = i;
+      neighbors = JSON.parse(neighbors);
+
+      console.log(neighbors);
       dictNeighbors[philosopher] = neighbors;
       philosophers.push(philosopher)
       i = i + 1;
