@@ -227,7 +227,6 @@ d3.csv("neighbors.csv", function(data) {
     });
 
     // Update the links array with the new links
-    links = selectedNodeLinks;
     var newLinks = [];
     for (let i = 0; i < links.length; i++) {
       if (!containsObject(links[i], selectedNodeLinks)) {
