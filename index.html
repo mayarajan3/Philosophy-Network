@@ -114,8 +114,25 @@ d3.csv("neighbors.csv", function(data) {
       }
     }
   }
-  console.log(nodes.toString());
-  console.log(links.toString());
+
+  var stringRepresentation = JSON.stringify(nodes, function(key, value) {
+  // Customize the representation of each object here
+    if (typeof value === 'object' && value !== null) {
+      return JSON.stringify(value); // For example, this returns a stringified version of the object
+    }
+    return value; // For non-objects, return the original value
+  });
+
+  var linkRepresentation = JSON.stringify(links, function(key, value) {
+  // Customize the representation of each object here
+    if (typeof value === 'object' && value !== null) {
+      return JSON.stringify(value); // For example, this returns a stringified version of the object
+    }
+    return value; // For non-objects, return the original value
+  });
+
+  console.log(stringRepresentation);
+  console.log(linkRepresentation);
 
   var width = window.innerWidth
   var height = window.innerHeight
