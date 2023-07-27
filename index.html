@@ -201,6 +201,9 @@ d3.csv("neighbors.csv", function(data) {
     // Update the links array with the new links
     links = selectedNodeLinks;
 
+    console.log(selectedNode);
+    console.log("links");
+    console.log(links);
     // Update the linkElements to show the new links
     linkElements = linkElements.data(links);
 
@@ -218,7 +221,7 @@ d3.csv("neighbors.csv", function(data) {
 
     // Restart the simulation to apply the changes
     simulation.alpha(1).restart();
-    neighbors = getNeighbors;
+    neighbors = getNeighbors(selectedNode);
 
     // we modify the styles to highlight selected nodes
     nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
