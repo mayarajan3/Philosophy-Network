@@ -53,7 +53,7 @@ d3.csv("neighbors.csv", function(data) {
       });
       console.log(neighbors)
 
-      str = neighbors.replace("\'", "").substring(1, str.length - 1); // cut out the brackets
+      str = neighbors.replace("\'", "").substring(1, neighbors.length - 1); // cut out the brackets
       neighbors = str.split(",");
       for (let j = 0; j < neighbors.length; j++) {
         if (neighbors[j] !== philosopher) {
