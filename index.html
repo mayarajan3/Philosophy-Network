@@ -66,6 +66,8 @@ d3.csv("neighbors.csv", function(data) {
   }
   for (var k = 0; k < philosophers.length; k++) {
     for (let j = 0; j < dictNeighbors[philosophers[k]].length; j++) {
+      console.log(dictNeighbors[philosophers[k]][j]);
+      console.log(dictPhil);
       if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
         links.push({
           target: dictPhil[dictNeighbors[philosophers[k]][j]],
