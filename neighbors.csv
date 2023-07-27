@@ -1,0 +1,30 @@
+philosopher,neighbors,school
+Hegel,"['Nietzsche', 'Heidegger', 'Derrida', 'Lenin', 'Deleuze', 'Marx']",german_idealism
+Aristotle,['Aristotle'],aristotle
+Plato,"['Nietzsche', 'Heidegger', 'Aristotle', 'Descartes', 'Russell', 'Leibniz']",plato
+Spinoza,"['Nietzsche', 'Hegel', 'Fichte', 'Wittgenstein', 'Deleuze', 'Marx', 'Leibniz', 'Kant']",rationalism
+Leibniz,"['Nietzsche', 'Heidegger', 'Hume', 'Russell', 'Kant']",rationalism
+Kant,"['Nietzsche', 'Hegel', 'Heidegger', 'Husserl', 'Foucault', 'Deleuze', 'Popper']",german_idealism
+Locke,"['Berkeley', 'Smith', 'Hume', 'Kant']",empiricism
+Malebranche,"['Berkeley', 'Hume', 'Leibniz']",rationalism
+Fichte,['Hegel'],german_idealism
+Berkeley,"['Hume', 'Kant']",empiricism
+Nietzsche,"['Heidegger', 'Derrida', 'Foucault', 'Wittgenstein', 'Deleuze']",nietzsche
+Husserl,"['Heidegger', 'Derrida', 'Merleau-Ponty']",phenomenology
+Marx,"['Foucault', 'Lenin', 'Deleuze', 'Beauvoir']",communism
+Beauvoir,[],feminism
+Epictetus,[],stoicism
+Hume,"['Smith', 'Deleuze', 'Popper', 'Russell', 'Kant', 'Quine']",empiricism
+Derrida,[],continental
+Heidegger,[],phenomenology
+Foucault,[],continental
+Quine,[],analytic
+Merleau-Ponty,"['Foucault', 'Deleuze']",phenomenology
+Descartes,"['Husserl', 'Locke', 'Spinoza', 'Leibniz', 'Kant', 'Malebranche']",rationalism
+Popper,[],analytic
+Russell,"['Wittgenstein', 'Popper']",analytic
+Deleuze,['Foucault'],continental
+Smith,[],capitalism
+Lewis,['Quine'],analytic
+Moore,"['Wittgenstein', 'Russell']",analytic
+Kripke,[],analytic
