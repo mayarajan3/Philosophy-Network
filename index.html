@@ -74,47 +74,7 @@ function getTextColor(node, neighbors) {
   return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
 }
 
-function selectNode(selectedNode) {
-  var neighbors = getNeighbors(selectedNode);
 
-  // Create a new set of links connecting the selected node to its neighbors
-  var selectedNodeLinks = neighbors.map(function (neighborId) {
-    return {
-      source: selectedNode,
-      target: nodes.find(function (node) {
-        return node.id === neighborId;
-      }),
-      strength: 0.7 // Set the desired strength for the new links
-    };
-  });
-
-  // Update the links array with the new links
-  links = selectedNodeLinks;
-
-  // Update the linkElements to show the new links
-  linkElements = linkElements.data(links);
-
-  // Remove any old links that are no longer needed
-  linkElements.exit().remove();
-
-  // Append new links to the DOM
-  linkElements = linkElements
-    .enter()
-    .append("line")
-    .attr("class", "link")
-    .attr("stroke-width", 1)
-    .attr("stroke", "rgba(50, 50, 50, 0.2)")
-    .merge(linkElements);
-
-  // Restart the simulation to apply the changes
-  simulation.alpha(1).restart();
-  neighbors = getNeighbors;
-
-  // we modify the styles to highlight selected nodes
-  nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
-  textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
-  linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
-}
 
 d3.csv("neighbors.csv", function(data) {
 
@@ -222,6 +182,49 @@ d3.csv("neighbors.csv", function(data) {
       .attr("fill", getNodeColor)
       .call(dragDrop)
       .on('click', selectNode)
+
+
+  function selectNode(selectedNode) {
+    var neighbors = getNeighbors(selectedNode);
+
+    // Create a new set of links connecting the selected node to its neighbors
+    var selectedNodeLinks = neighbors.map(function (neighborId) {
+      return {
+        source: selectedNode,
+        target: nodes.find(function (node) {
+          return node.id === neighborId;
+        }),
+        strength: 0.7 // Set the desired strength for the new links
+      };
+    });
+
+    // Update the links array with the new links
+    links = selectedNodeLinks;
+
+    // Update the linkElements to show the new links
+    linkElements = linkElements.data(links);
+
+    // Remove any old links that are no longer needed
+    linkElements.exit().remove();
+
+    // Append new links to the DOM
+    linkElements = linkElements
+      .enter()
+      .append("line")
+      .attr("class", "link")
+      .attr("stroke-width", 1)
+      .attr("stroke", "rgba(50, 50, 50, 0.2)")
+      .merge(linkElements);
+
+    // Restart the simulation to apply the changes
+    simulation.alpha(1).restart();
+    neighbors = getNeighbors;
+
+    // we modify the styles to highlight selected nodes
+    nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+    textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
+    linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+  }
 
   // var textElements = svg.append("g")
   //   .attr("class", "texts")
