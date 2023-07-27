@@ -60,6 +60,7 @@ d3.csv("neighbors.csv", function(data) {
       neighbors = JSON.parse(neighbors);
 
       console.log(neighbors);
+      dictPhil[philosopher] = i;
       dictNeighbors[philosopher] = neighbors;
       philosophers.push(philosopher)
       i = i + 1;
