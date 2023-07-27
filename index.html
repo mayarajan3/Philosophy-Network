@@ -201,7 +201,7 @@ d3.csv("neighbors.csv", function(data) {
       .attr('x2', function (link) { return link.target.x || 0})
       .attr('y2', function (link) { return link.target.y || 0})
   })
-
+  console.log(links);
   simulation.force("link").links(links)
 });
 
