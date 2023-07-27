@@ -39,34 +39,44 @@
 var nodes = [];
 var links = [];
 let i = 0;
-
+var dictPhil = {};
+var dictNeighbors = {};
+var philosophers = [];
 d3.csv("neighbors.csv", function(data) {
+
   for (var k = 0; k < data.length; k++) {
       console.log(data[k]);
       neighbors = data[k].neighbors;
       philosopher = data[k].philosopher;
       nodes.push({
-        id: philosopher,
+        id: i,
         group: 0,
         label: philosopher,
         level: 1
       });
+
       console.log(neighbors)
 
       str = neighbors.replace("\'", "").substring(1, neighbors.length - 1); // cut out the brackets
       neighbors = str.split(",");
-      for (let j = 0; j < neighbors.length; j++) {
-        if (neighbors[j] !== philosopher) {
-          links.push({
-            target: neighbors[j],
-            source: philosopher,
-            strength: 1
-          });
-        }
-      }
+      dictPhil[philosopher] = i;
+      dictNeighbors[philosopher] = neighbors;
+      philosophers.push(philosopher)
       i = i + 1;
   }
 });
+
+for (var k = 0; k < philosophers.length; k++) {
+  for (let j = 0; j < dictNeighbors[philosophers[k]].length; j++) {
+    if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
+      links.push({
+        target: dictPhil[dictNeighbors[philosophers[k]][j]],
+        source: dictPhil[philosophers[k]],
+        strength: 1
+      });
+    }
+  }
+}
 
 function getNeighbors(node) {
   return links.reduce(function (neighbors, link) {
