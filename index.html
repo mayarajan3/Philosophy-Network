@@ -46,9 +46,9 @@ d3.csv("neighbors.csv", function(data) {
       neighbors = data[k].neighbors;
       philosopher = data[k].philosopher;
       nodes.push({
-        id: data.philosopher,
+        id: philosopher,
         group: 0,
-        label: data.philosopher,
+        label: philosopher,
         level: 1
       });
       console.log(neighbors)
@@ -59,7 +59,7 @@ d3.csv("neighbors.csv", function(data) {
         if (neighbors[j] !== philosopher) {
           links.push({
             target: neighbors[j],
-            source: data.philosopher,
+            source: philosopher,
             strength: 1
           });
         }
