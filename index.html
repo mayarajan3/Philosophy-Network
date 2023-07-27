@@ -225,7 +225,6 @@ d3.csv("neighbors.csv", function(data) {
 
     // we modify the styles to highlight selected nodes
     nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
-    textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
     linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
   }
 
