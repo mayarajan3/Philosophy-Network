@@ -56,7 +56,7 @@ d3.csv("neighbors.csv", function(data) {
       });
 
       console.log(neighbors)
-
+      neighbors = neighbors.replace(/'/g, "\"");
       neighbors = JSON.parse(neighbors);
 
       console.log(neighbors);
