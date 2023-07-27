@@ -119,7 +119,7 @@ d3.csv("neighbors.csv", function(data) {
           links.push({
             target: dictPhil[dictNeighbors[philosophers[k]][j]],
             source: dictPhil[philosophers[k]],
-            strength: 0.7
+            strength: 0.2
           });
         }
       }
@@ -142,7 +142,7 @@ d3.csv("neighbors.csv", function(data) {
   var simulation = d3
     .forceSimulation()
     .force('link', linkForce)
-    .force('charge', d3.forceManyBody().strength(-120))
+    .force('charge', d3.forceManyBody().strength(-100))
     .force('center', d3.forceCenter(width / 2, height / 2))
 
   var dragDrop = d3.drag().on('start', function (node) {
