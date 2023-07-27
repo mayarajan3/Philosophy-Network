@@ -50,6 +50,10 @@ d3.csv("neighbors.csv", function(data) {
       label: data.philosopher,
       level: 1
     });
+    console.log(neighbors)
+
+    str = neighbors.substring(1, str.length - 1); // cut out the brackets
+    neighbors = neighbors.split(",");
     for (let j = 0; j < neighbors.length; j++) {
       if (neighbors[j] !== philosopher) {
         links.push({
