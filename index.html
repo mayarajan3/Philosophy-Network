@@ -138,7 +138,7 @@ d3.csv("neighbors.csv", function(data) {
   var linkForce = d3
     .forceLink()
     .strength(function (link) { return link.strength })
-    .distance(200)
+    .distance(100)
 
   var simulation = d3
     .forceSimulation()
