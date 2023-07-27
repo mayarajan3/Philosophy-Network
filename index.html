@@ -130,7 +130,6 @@ svg.attr('width', width).attr('height', height)
 // simulation setup with all forces
 var linkForce = d3
   .forceLink()
-  .id(function (link) { return link.id })
   .strength(function (link) { return link.strength })
 
 var simulation = d3
