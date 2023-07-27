@@ -201,6 +201,17 @@ d3.csv("neighbors.csv", function(data) {
       .on('click', selectNode)
 
 
+  function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if (list[i] === obj) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
   function selectNode(selectedNode) {
     var neighbors = getNeighbors(selectedNode);
 
@@ -217,12 +228,18 @@ d3.csv("neighbors.csv", function(data) {
 
     // Update the links array with the new links
     links = selectedNodeLinks;
+    var newLinks = [];
+    for (let i = 0; i < links.length; i++) {
+      if (!containsObject(links[i], selectedNodeLinks)) {
+        newLinks.push(links[i]);
+      }
+    }
 
     console.log(selectedNode);
     console.log("links");
-    console.log(links);
+    console.log(newLinks);
     // Update the linkElements to show the new links
-    linkElements = linkElements.data(links);
+    linkElements = linkElements.data(newLinks);
 
     // Remove any old links that are no longer needed
     linkElements.exit().remove();
