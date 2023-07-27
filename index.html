@@ -64,22 +64,24 @@ d3.csv("neighbors.csv", function(data) {
       philosophers.push(philosopher)
       i = i + 1;
   }
-});
-
-for (var k = 0; k < philosophers.length; k++) {
-  for (let j = 0; j < dictNeighbors[philosophers[k]].length; j++) {
-    if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
-      links.push({
-        target: dictPhil[dictNeighbors[philosophers[k]][j]],
-        source: dictPhil[philosophers[k]],
-        strength: 1
-      });
+  for (var k = 0; k < philosophers.length; k++) {
+    for (let j = 0; j < dictNeighbors[philosophers[k]].length; j++) {
+      if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
+        links.push({
+          target: dictPhil[dictNeighbors[philosophers[k]][j]],
+          source: dictPhil[philosophers[k]],
+          strength: 1
+        });
+      }
     }
   }
-}
+  console.log(nodes);
+  console.log(links);
+});
 
-console.log(nodes);
-console.log(links);
+
+
+
 
 function getNeighbors(node) {
   return links.reduce(function (neighbors, link) {
