@@ -75,7 +75,40 @@ function getTextColor(node, neighbors) {
 }
 
 function selectNode(selectedNode) {
-  var neighbors = getNeighbors(selectedNode)
+  var neighbors = getNeighbors(selectedNode);
+
+  // Create a new set of links connecting the selected node to its neighbors
+  var selectedNodeLinks = neighbors.map(function (neighborId) {
+    return {
+      source: selectedNode,
+      target: nodes.find(function (node) {
+        return node.id === neighborId;
+      }),
+      strength: 0.7 // Set the desired strength for the new links
+    };
+  });
+
+  // Update the links array with the new links
+  links = selectedNodeLinks;
+
+  // Update the linkElements to show the new links
+  linkElements = linkElements.data(links);
+
+  // Remove any old links that are no longer needed
+  linkElements.exit().remove();
+
+  // Append new links to the DOM
+  linkElements = linkElements
+    .enter()
+    .append("line")
+    .attr("class", "link")
+    .attr("stroke-width", 1)
+    .attr("stroke", "rgba(50, 50, 50, 0.2)")
+    .merge(linkElements);
+
+  // Restart the simulation to apply the changes
+  simulation.alpha(1).restart();
+  neighbors = getNeighbors;
 
   // we modify the styles to highlight selected nodes
   nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
@@ -121,8 +154,8 @@ d3.csv("neighbors.csv", function(data) {
       }
     }
   }
-  console.log(nodes);
-  console.log(links);
+  console.log(nodes.toString());
+  console.log(links.toString());
 
   var width = window.innerWidth
   var height = window.innerHeight
@@ -213,6 +246,8 @@ d3.csv("neighbors.csv", function(data) {
       .attr('x2', function (link) { return link.target.x || 0})
       .attr('y2', function (link) { return link.target.y || 0})
   })
+
+
 
   simulation.force("link").links(links)
 });
