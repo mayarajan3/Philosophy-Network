@@ -190,10 +190,10 @@ d3.csv("neighbors.csv", function(data) {
     // Create a new set of links connecting the selected node to its neighbors
     var selectedNodeLinks = neighbors.map(function (neighborId) {
       return {
-        source: selectedNode,
+        source: selectedNode.id,
         target: nodes.find(function (node) {
           return node.id === neighborId;
-        }),
+        }).id,
         strength: 0.7 // Set the desired strength for the new links
       };
     });
