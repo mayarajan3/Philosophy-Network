@@ -42,6 +42,7 @@ let i = 0;
 var dictPhil = {};
 var dictNeighbors = {};
 var philosophers = [];
+
 d3.csv("neighbors.csv", function(data) {
 
   for (var k = 0; k < data.length; k++) {
@@ -80,48 +81,8 @@ d3.csv("neighbors.csv", function(data) {
   }
   console.log(nodes);
   console.log(links);
-});
 
-
-
-
-
-function getNeighbors(node) {
-  return links.reduce(function (neighbors, link) {
-      if (link.target.id === node.id) {
-        neighbors.push(link.source.id)
-      } else if (link.source.id === node.id) {
-        neighbors.push(link.target.id)
-      }
-      return neighbors
-    },
-    [node.id]
-  )
-}
-
-function isNeighborLink(node, link) {
-  return link.target.id === node.id || link.source.id === node.id
-}
-
-
-function getNodeColor(node, neighbors) {
-  if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
-    return node.level === 1 ? 'blue' : 'green'
-  }
-
-  return node.level === 1 ? 'red' : 'gray'
-}
-
-
-function getLinkColor(node, link) {
-  return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
-}
-
-function getTextColor(node, neighbors) {
-  return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
-}
-
-var width = window.innerWidth
+  var width = window.innerWidth
 var height = window.innerHeight
 
 var svg = d3.select('svg')
@@ -153,14 +114,7 @@ var dragDrop = d3.drag().on('start', function (node) {
   node.fy = null
 })
 
-function selectNode(selectedNode) {
-  var neighbors = getNeighbors(selectedNode)
 
-  // we modify the styles to highlight selected nodes
-  nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
-  textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
-  linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
-}
 
 var linkElements = svg.append("g")
   .attr("class", "links")
@@ -205,4 +159,55 @@ simulation.nodes(nodes).on('tick', () => {
 })
 
 simulation.force("link").links(links)
+});
+
+
+
+
+
+function getNeighbors(node) {
+  return links.reduce(function (neighbors, link) {
+      if (link.target.id === node.id) {
+        neighbors.push(link.source.id)
+      } else if (link.source.id === node.id) {
+        neighbors.push(link.target.id)
+      }
+      return neighbors
+    },
+    [node.id]
+  )
+}
+
+function isNeighborLink(node, link) {
+  return link.target.id === node.id || link.source.id === node.id
+}
+
+
+function getNodeColor(node, neighbors) {
+  if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
+    return node.level === 1 ? 'blue' : 'green'
+  }
+
+  return node.level === 1 ? 'red' : 'gray'
+}
+
+
+function getLinkColor(node, link) {
+  return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
+}
+
+function getTextColor(node, neighbors) {
+  return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
+}
+
+function selectNode(selectedNode) {
+  var neighbors = getNeighbors(selectedNode)
+
+  // we modify the styles to highlight selected nodes
+  nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+  textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
+  linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+}
+
+
 </script>
