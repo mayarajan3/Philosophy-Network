@@ -383,7 +383,7 @@ var deletedLinksDict = {};
       } else {
         var newLinks = [];
         for (let i = 0; i < links.length; i++) {
-          if (links[i] != newLinksDict[selectedNode]) {
+          if (!newLinksDict[selectedNode].includes(links[i])) {
             newLinks.push(links[i]);
           }
         }
