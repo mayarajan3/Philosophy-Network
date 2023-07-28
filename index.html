@@ -238,11 +238,20 @@ d3.csv("neighbors.csv", function(data) {
 
       deletedNodesDict[selectedNode] = [];
 
+      var neighbors = []
+        for (let i = 0; i < originalLinks.length; i++) {
+          if (originalLinks[i].source == selectedNode) {
+            deletedNodesDict[selectedNode].push(originalLinks[i].target);
+          } else if (originalLinks[i].target == selectedNode) {
+            deletedNodesDict[selectedNode].push(originalLinks[i].source);
+          }
+        }
+
         var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
           var foundNode = nodes.find(function (node) {
               return node.id === neighborId;
             });
-          deletedNodesDict[selectedNode].push(foundNode);
+
           nodes[foundNode.id].visible = false;
           return {
             source: selectedNode,
