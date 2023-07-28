@@ -232,213 +232,281 @@ d3.csv("neighbors.csv", function(data) {
   var deletedLinksDict = {};
 
 
+  // function selectNode(selectedNode) {
+  //   var neighbors = getNeighbors(selectedNode);
+  //   if (selectedNode.group == 1 && selectedNode.collapsed == false) {
+
+  //     deletedNodesDict[selectedNode] = [];
+
+  //       var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
+  //         var foundNode = nodes.find(function (node) {
+  //             return node.id === neighborId;
+  //           });
+  //         deletedNodesDict[selectedNode].push(foundNode);
+  //         nodes[foundNode.id].visible = false;
+  //         return {
+  //           source: selectedNode,
+  //           target: foundNode,
+  //           strength: 0.7
+  //         };
+  //       });
+
+  //       var secondarySelectedNodeLinks = [];
+  //       for (let i = 0; i < neighbors.length; i++) {
+  //         var foundNode = nodes.find(function (node) {
+  //             return node.id === neighbors[i];
+  //           })
+  //         var secondaryNeighbors = getNeighbors(foundNode);
+  //         console.log(foundNode);
+  //         console.log(secondaryNeighbors);
+  //         var temp = secondaryNeighbors.map(function (neighborId) {
+  //           return {
+  //             source: foundNode,
+  //             target: nodes.find(function (node) {
+  //               return node.id === neighborId;
+  //             }),
+  //             strength: 0.7
+  //           };
+  //         });
+  //         console.log(temp);
+  //         secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
+  //       }
+  //       console.log(secondarySelectedNodeLinks);
+  //       var newLinks = [];
+  //       newLinksDict[selectedNode] = [];
+  //       deletedLinksDict[selectedNode] = [];
+  //       for (let i = 0; i < links.length; i++) {
+  //         if (containsObject(links[i], primarySelectedNodeLinks)) {
+  //           deletedLinksDict[selectedNode].push(links[i]);
+  //         } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
+  //           var addedLink = Object.assign({}, links[i]);
+  //           deletedLinksDict[selectedNode].push(links[i]);
+  //           console.log(neighbors);
+  //           if (neighbors.includes(addedLink.source.id)) {
+  //             addedLink.source = selectedNode;
+  //           } else {
+  //             addedLink.target = selectedNode;
+  //           }
+  //           newLinksDict[selectedNode].push(addedLink);
+  //           newLinks.push(addedLink);
+  //         } else {
+  //           newLinks.push(links[i]);
+
+  //         }
+  //       }
+  //       console.log(deletedLinksDict[selectedNode]);
+
+  //       console.log(selectedNode);
+  //       console.log("links");
+  //       console.log(newLinks);
+  //       links = newLinks;
+  //       linkElements = linkElements.data(newLinks);
+
+  //       linkElements.exit().remove();
+
+  //       linkElements = linkElements
+  //         .enter()
+  //         .append("line")
+  //         .attr("class", "link")
+  //         .attr("stroke-width", 1)
+  //         .attr("stroke", "rgba(50, 50, 50, 0.2)")
+  //         .merge(linkElements);
+
+
+
+  //         nodes[selectedNode.id].collapsed = true;
+
+
+  //     } else {
+  //       // Restore all links from school to philosopher
+  //       // Restore all links from philosopher to others
+  //       // Remove all links from school
+
+  //       var newLinks = [];
+
+  //       var neighbors = []
+  //       for (let i = 0; i < originalLinks.length; i++) {
+  //         if (originalLinks[i].source == selectedNode) {
+  //           neighbors.push(originalLinks[i].target);
+  //         } else if (originalLinks[i].target == selectedNode) {
+  //           neighbors.push(originalLinks[i].source);
+  //         }
+  //       }
+  //       //not connected to neighbors or selected node
+  //       for (let i = 0; i < links.length; i++) {
+  //         if (links[i].source != selectedNode && links[i].target != selectedNode) {
+  //           var notIncluded = true;
+  //           for (let j = 0; j < neighbors.length; j++) {
+  //             if (links[i].source == neighbors[j] || links[i].target == neighbors[j] ) {
+  //               notIncluded = false;
+  //             }
+  //           }
+  //           if (notIncluded) {
+  //             newLinks.push(links[i]);
+  //           }
+
+  //         }
+  //       }
+  //       //for each neighbor link, determine where it should go
+  //       console.log("step 1");
+  //       console.log(newLinks);
+  //       var step2 = [];
+  //       for (let j = 0; j < neighbors.length; j++) {
+  //         let tempNeighbor = neighbors[j];
+  //         for (let i = 0; i < originalLinks.length; i++) {
+  //           if ((originalLinks[i].source == tempNeighbor) && (originalLinks[i].target != selectedNode)) {
+  //             var newLink = Object.assign({}, originalLinks[i]);
+  //             var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]]
+  //             if (nodes[schoolId].collapsed) {
+  //               newLink.target = nodes[schoolId];
+  //             }
+  //             newLinks.push(newLink);
+  //             step2.push(newLink);
+  //           } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
+  //             var newLink = Object.assign({}, originalLinks[i]);
+  //             console.log(originalLinks[i].source.label);
+  //             console.log(dictSchool[originalLinks[i].source.label]);
+  //             console.log(dictSchool);
+  //             console.log(dictPhil[dictSchool[originalLinks[i].source.label]]);
+  //             var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
+  //             if (nodes[schoolId].collapsed) {
+  //               newLink.source = nodes[schoolId];
+  //             }
+  //             newLinks.push(newLink);
+  //             step2.push(newLink);
+  //           }
+  //         }
+  //       }
+  //       console.log("step 2");
+  //       console.log(step2);
+
+  //       var step3 = [];
+  //       for (let i = 0; i < originalLinks.length; i++) {
+  //         if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
+  //           newLinks.push(originalLinks[i]);
+  //           step3.push(originalLinks[i]);
+  //         }
+  //       }
+  //       console.log("step 3");
+  //       console.log(step3);
+
+  //       // for (let i = 0; i < deletedLinksDict[selectedNode].length; i++) {
+  //       //   newLinks.push(deletedLinksDict[selectedNode][i]);
+  //       //   console.log(deletedLinksDict[selectedNode][i]);
+  //       // }
+  //       links = newLinks;
+  //       // Update the linkElements to show the new links
+  //       linkElements = linkElements.data(newLinks);
+
+  //       // Remove any old links that are no longer needed
+  //       linkElements.exit().remove();
+
+  //       // Append new links to the DOM
+  //       linkElements = linkElements
+  //         .enter()
+  //         .append("line")
+  //         .attr("class", "link")
+  //         .attr("stroke-width", 1)
+  //         .attr("stroke", "rgba(50, 50, 50, 0.2)")
+  //         .merge(linkElements);
+  //       nodes[selectedNode.id].collapsed = false;
+
+
+
+  //       console.log(deletedNodesDict[selectedNode]);
+  //       for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
+  //         console.log(deletedNodesDict[selectedNode][i].id);
+  //         nodes[deletedNodesDict[selectedNode][i].id].visible = true;
+  //       }
+
+  //       simulation.force("link").links(links)
+
+
+  //     }
+
+
+  //   // Restart the simulation to apply the changes
+  //   simulation.alpha(1).restart();
+  //   neighbors = getNeighbors(selectedNode);
+
+  //   // we modify the styles to highlight selected nodes
+  //   nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+  //   .style("visibility", function(node) {
+  //     if (!node.visible && node.group == 0) {
+  //       return "hidden";
+  //     }
+  //     return "visible";
+  //   });
+  //   linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+  // }
+
   function selectNode(selectedNode) {
-    var neighbors = getNeighbors(selectedNode);
-    if (selectedNode.group == 1 && selectedNode.collapsed == false) {
+  if (selectedNode.group === 1 && !selectedNode.collapsed) {
+    // Collapse the school node
+    selectedNode.collapsed = true;
 
-      deletedNodesDict[selectedNode] = [];
-
-        var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
-          var foundNode = nodes.find(function (node) {
-              return node.id === neighborId;
-            });
-          deletedNodesDict[selectedNode].push(foundNode);
-          nodes[foundNode.id].visible = false;
-          return {
-            source: selectedNode,
-            target: foundNode,
-            strength: 0.7
-          };
-        });
-
-        var secondarySelectedNodeLinks = [];
-        for (let i = 0; i < neighbors.length; i++) {
-          var foundNode = nodes.find(function (node) {
-              return node.id === neighbors[i];
-            })
-          var secondaryNeighbors = getNeighbors(foundNode);
-          console.log(foundNode);
-          console.log(secondaryNeighbors);
-          var temp = secondaryNeighbors.map(function (neighborId) {
-            return {
-              source: foundNode,
-              target: nodes.find(function (node) {
-                return node.id === neighborId;
-              }),
-              strength: 0.7
-            };
-          });
-          console.log(temp);
-          secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
-        }
-        console.log(secondarySelectedNodeLinks);
-        var newLinks = [];
-        newLinksDict[selectedNode] = [];
-        deletedLinksDict[selectedNode] = [];
-        for (let i = 0; i < links.length; i++) {
-          if (containsObject(links[i], primarySelectedNodeLinks)) {
-            deletedLinksDict[selectedNode].push(links[i]);
-          } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
-            var addedLink = Object.assign({}, links[i]);
-            deletedLinksDict[selectedNode].push(links[i]);
-            console.log(neighbors);
-            if (neighbors.includes(addedLink.source.id)) {
-              addedLink.source = selectedNode;
-            } else {
-              addedLink.target = selectedNode;
-            }
-            newLinksDict[selectedNode].push(addedLink);
-            newLinks.push(addedLink);
-          } else {
-            newLinks.push(links[i]);
-
-          }
-        }
-        console.log(deletedLinksDict[selectedNode]);
-
-        console.log(selectedNode);
-        console.log("links");
-        console.log(newLinks);
-        links = newLinks;
-        linkElements = linkElements.data(newLinks);
-
-        linkElements.exit().remove();
-
-        linkElements = linkElements
-          .enter()
-          .append("line")
-          .attr("class", "link")
-          .attr("stroke-width", 1)
-          .attr("stroke", "rgba(50, 50, 50, 0.2)")
-          .merge(linkElements);
-
-
-
-          nodes[selectedNode.id].collapsed = true;
-
-
-      } else {
-        // Restore all links from school to philosopher
-        // Restore all links from philosopher to others
-        // Remove all links from school
-
-        var newLinks = [];
-
-        var neighbors = []
-        for (let i = 0; i < originalLinks.length; i++) {
-          if (originalLinks[i].source == selectedNode) {
-            neighbors.push(originalLinks[i].target);
-          } else if (originalLinks[i].target == selectedNode) {
-            neighbors.push(originalLinks[i].source);
-          }
-        }
-        //not connected to neighbors or selected node
-        for (let i = 0; i < links.length; i++) {
-          if (links[i].source != selectedNode && links[i].target != selectedNode) {
-            var notIncluded = true;
-            for (let j = 0; j < neighbors.length; j++) {
-              if (links[i].source == neighbors[j] || links[i].target == neighbors[j] ) {
-                notIncluded = false;
-              }
-            }
-            if (notIncluded) {
-              newLinks.push(links[i]);
-            }
-
-          }
-        }
-        //for each neighbor link, determine where it should go
-        console.log("step 1");
-        console.log(newLinks);
-        var step2 = [];
-        for (let j = 0; j < neighbors.length; j++) {
-          let tempNeighbor = neighbors[j];
-          for (let i = 0; i < originalLinks.length; i++) {
-            if ((originalLinks[i].source == tempNeighbor) && (originalLinks[i].target != selectedNode)) {
-              var newLink = Object.assign({}, originalLinks[i]);
-              var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]]
-              if (nodes[schoolId].collapsed) {
-                newLink.target = nodes[schoolId];
-              }
-              newLinks.push(newLink);
-              step2.push(newLink);
-            } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
-              var newLink = Object.assign({}, originalLinks[i]);
-              console.log(originalLinks[i].source.label);
-              console.log(dictSchool[originalLinks[i].source.label]);
-              console.log(dictSchool);
-              console.log(dictPhil[dictSchool[originalLinks[i].source.label]]);
-              var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
-              if (nodes[schoolId].collapsed) {
-                newLink.source = nodes[schoolId];
-              }
-              newLinks.push(newLink);
-              step2.push(newLink);
-            }
-          }
-        }
-        console.log("step 2");
-        console.log(step2);
-
-        var step3 = [];
-        for (let i = 0; i < originalLinks.length; i++) {
-          if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
-            newLinks.push(originalLinks[i]);
-            step3.push(originalLinks[i]);
-          }
-        }
-        console.log("step 3");
-        console.log(step3);
-
-        // for (let i = 0; i < deletedLinksDict[selectedNode].length; i++) {
-        //   newLinks.push(deletedLinksDict[selectedNode][i]);
-        //   console.log(deletedLinksDict[selectedNode][i]);
-        // }
-        links = newLinks;
-        // Update the linkElements to show the new links
-        linkElements = linkElements.data(newLinks);
-
-        // Remove any old links that are no longer needed
-        linkElements.exit().remove();
-
-        // Append new links to the DOM
-        linkElements = linkElements
-          .enter()
-          .append("line")
-          .attr("class", "link")
-          .attr("stroke-width", 1)
-          .attr("stroke", "rgba(50, 50, 50, 0.2)")
-          .merge(linkElements);
-        nodes[selectedNode.id].collapsed = false;
-
-
-
-        console.log(deletedNodesDict[selectedNode]);
-        for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
-          console.log(deletedNodesDict[selectedNode][i].id);
-          nodes[deletedNodesDict[selectedNode][i].id].visible = true;
-        }
-
-        simulation.force("link").links(links)
-
-
-      }
-
-
-    // Restart the simulation to apply the changes
-    simulation.alpha(1).restart();
-    neighbors = getNeighbors(selectedNode);
-
-    // we modify the styles to highlight selected nodes
-    nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
-    .style("visibility", function(node) {
-      if (!node.visible && node.group == 0) {
-        return "hidden";
-      }
-      return "visible";
+    // Remove links connected to the selected school and its philosopher nodes
+    var newLinks = links.filter(function (link) {
+      return (
+        link.source !== selectedNode &&
+        link.target !== selectedNode &&
+        (!link.source.collapsed || !link.target.collapsed)
+      );
     });
-    linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+
+    // Update the links and nodes arrays
+    links = newLinks;
+    linkElements = linkElements.data(newLinks);
+  } else {
+    // Expand the school node
+    selectedNode.collapsed = false;
+
+    // Restore the links from the school node to the philosopher nodes
+    var newLinks = links.slice();
+    philosophers.forEach(function (philosopher) {
+      if (dictSchool[philosopher] === selectedNode.label) {
+        newLinks.push({
+          source: selectedNode,
+          target: nodes[dictPhil[philosopher]],
+          strength: 0.1,
+        });
+      }
+    });
+
+    // Restore the links between philosopher nodes that were removed when collapsing
+    var philosopherLinks = originalLinks.filter(function (link) {
+      return (
+        (link.source === selectedNode || link.target === selectedNode) &&
+        !newLinks.some(function (newLink) {
+          return (
+            (newLink.source === link.source && newLink.target === link.target) ||
+            (newLink.source === link.target && newLink.target === link.source)
+          );
+        })
+      );
+    });
+
+    newLinks.push(...philosopherLinks);
+
+    // Update the links and nodes arrays
+    links = newLinks;
+    linkElements = linkElements.data(newLinks);
   }
+
+  // Restart the simulation to apply the changes
+  simulation.alpha(1).restart();
+
+  // Modify the styles to highlight selected nodes
+  var neighbors = getNeighbors(selectedNode);
+  nodeElements.attr('fill', function (node) {
+    return getNodeColor(node, neighbors);
+  });
+
+  linkElements.attr('stroke', function (link) {
+    return getLinkColor(selectedNode, link);
+  });
+}
+
 
   // var textElements = svg.append("g")
   //   .attr("class", "texts")
