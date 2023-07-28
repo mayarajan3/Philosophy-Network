@@ -422,10 +422,12 @@ d3.csv("neighbors.csv", function(data) {
     // we modify the styles to highlight selected nodes
     nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
     .style("visibility", function(node) {
-      if (!node.visible && node.group == 0) {
-        return "hidden";
+      for (let i = 0; i < links.length; i++) {
+        if (links[i].source == node || links[i].target == node) {
+          return "visible";
+        }
       }
-      return "visible";
+      return "hidden";
     });
     linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
   }
