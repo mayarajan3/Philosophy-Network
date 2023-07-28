@@ -416,6 +416,9 @@ var deletedLinksDict = {};
               newLinks.push(newLink);
             } else if (originalLinks[i].target == tempNeighbor) {
               var newLink = Object.assign({}, originalLinks[i]);
+              console.log(originalLinks[i].source.label);
+              console.log(dictSchool[originalLinks[i].source.label]);
+              console.log(dictPhil[dictSchool[originalLinks[i].source.label]]);
               var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
               if (nodes[schoolId].collapsed) {
                 newLink.source = nodes[schoolId];
