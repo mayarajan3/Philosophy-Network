@@ -401,7 +401,16 @@ d3.csv("neighbors.csv", function(data) {
         //not connected to neighbors or selected node
         for (let i = 0; i < links.length; i++) {
           if (links[i].source != selectedNode || links[i].target != selectedNode) {
-            newLinks.push(links[i]);
+            var notIncluded = true;
+            for (let j = 0; j < neighbors.length; j++) {
+              if (links[i].source == neighbors[j] || links[i].target == neighbors[j] ) {
+                notIncluded = false;
+              }
+            }
+            if (notIncluded) {
+              newLinks.push(links[i]);
+            }
+
           }
         }
         //for each neighbor link, determine where it should go
