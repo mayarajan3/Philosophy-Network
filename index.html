@@ -41,7 +41,7 @@ function getNodeColor(node, neighbors) {
   if (node.group == 0) {
     return "url(#image-" + node.label + ")";
   } else {
-    if (node.label == "aristotle" || node.label == "plato") {
+    if (node.label == "aristotle" || node.label == "plato" || node.label == "nietzsche") {
       return "url(#image-" + node.label + "2)";
     } else {
       return "url(#image-" + node.label + ")";
@@ -193,7 +193,7 @@ d3.csv("neighbors.csv", function(data) {
      defs.append("svg:pattern")
         .attr("width", 1)
         .attr("height", 1)
-        .attr("id", "image-" + nodes[y].label)
+        .attr("id", (nodes[y].label == "aristotle" || nodes[y].label == "plato" || nodes[y].label == "nietzsche") ? "image-" + nodes[y].label + "2" : "image-" + nodes[y].label)
         .append("svg:image")
         .attr("xlink:href", (nodes[y].label == "aristotle" || nodes[y].label == "plato" || nodes[y].label == "nietzsche") ? "images/" + nodes[y].label + "2.jpg" : "images/" + nodes[y].label + ".jpg")
         .attr("width", 40)
