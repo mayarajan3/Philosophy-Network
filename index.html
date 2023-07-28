@@ -449,7 +449,9 @@ d3.csv("neighbors.csv", function(data) {
     .enter().append("text")
       .text(function (node) {
         if (node.group == 1) {
-          return node.label
+          var label = node.label.replace("_", " ");
+          label = label.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+          return label;
         } else {
           return "";
         }
