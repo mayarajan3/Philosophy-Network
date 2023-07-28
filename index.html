@@ -138,7 +138,7 @@ d3.csv("neighbors.csv", function(data) {
     }
   }
   for (var k = 0; k < keys.length; k++) {
-    var philosopherSchools = schools[keys[i]];
+    var philosopherSchools = schools[keys[k]];
     for (var j = 0; j < philosopherSchools.length; j++) {
       if ((typeof dictPhil[philosopherSchools[j]] == 'number') && (typeof dictPhil[keys[k]] == 'number')) {
         links.push({
