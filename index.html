@@ -352,25 +352,25 @@ var deletedLinksDict = {};
 
 
 
-          selectedNode.collapsed = true;
+          nodes[selectedNode.id].collapsed = true;
 
-          var newNodes = [];
-          for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i].id == selectedNode.id) {
-              var tempNode = selectedNode;
-              tempNode.collapsed = true;
-              newNodes.push(tempNode);
-            } else if (!neighbors.includes(nodes[i].id)) {
-              newNodes.push(nodes[i])
-            }
-          }
-        nodes = newNodes;
-        console.log(newNodes);
-        // Update the linkElements to show the new links
-        nodeElements = nodeElements.data(newNodes);
+        //   var newNodes = [];
+        //   for (let i = 0; i < nodes.length; i++) {
+        //     if (nodes[i].id == selectedNode.id) {
+        //       var tempNode = selectedNode;
+        //       tempNode.collapsed = true;
+        //       newNodes.push(tempNode);
+        //     } else if (!neighbors.includes(nodes[i].id)) {
+        //       newNodes.push(nodes[i])
+        //     }
+        //   }
+        // nodes = newNodes;
+        // console.log(newNodes);
+        // // Update the linkElements to show the new links
+        // nodeElements = nodeElements.data(newNodes);
 
-        // Remove any old links that are no longer needed
-        nodeElements.exit().remove();
+        // // Remove any old links that are no longer needed
+        // nodeElements.exit().remove();
 
         // Append new links to the DOM
         // nodeElements = svg.append("g")
@@ -407,34 +407,34 @@ var deletedLinksDict = {};
           .attr("stroke", "rgba(50, 50, 50, 0.2)")
           .merge(linkElements);
 
-          var newNodes = nodes;
-          for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
-            newNodes.push(deletedNodesDict[selectedNode][i])
-            nodeEnter = nodeElements.enter().append("circle")
-                .attr("r", getNodeSize)
-                .attr("fill", getNodeColor)
-                .call(dragDrop)
-                .on('click', selectNode)
+        //   var newNodes = nodes;
+        //   for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
+        //     newNodes.push(deletedNodesDict[selectedNode][i])
+        //     nodeEnter = nodeElements.enter().append("circle")
+        //         .attr("r", getNodeSize)
+        //         .attr("fill", getNodeColor)
+        //         .call(dragDrop)
+        //         .on('click', selectNode)
 
-            nodeElements = nodeElements.merge(nodeEnter);
+        //     nodeElements = nodeElements.merge(nodeEnter);
 
-        // Exit any old nodes
-            nodeElements.exit().remove();
-          }
+        // // Exit any old nodes
+        //     nodeElements.exit().remove();
+        //   }
 
-        simulation.nodes(nodes).on('tick', () => {
-          nodeElements
-            .attr('cx', function (node) { return node.x || 0})
-            .attr('cy', function (node) { return node.y || 0})
-          // textElements
-          //   .attr('x', function (node) { return node.x || 0})
-          //   .attr('y', function (node) { return node.y || 0})
-          linkElements
-            .attr('x1', function (link) { return link.source.x || 0})
-            .attr('y1', function (link) { return link.source.y || 0})
-            .attr('x2', function (link) { return link.target.x || 0})
-            .attr('y2', function (link) { return link.target.y || 0})
-        })
+        // simulation.nodes(nodes).on('tick', () => {
+        //   nodeElements
+        //     .attr('cx', function (node) { return node.x || 0})
+        //     .attr('cy', function (node) { return node.y || 0})
+        //   // textElements
+        //   //   .attr('x', function (node) { return node.x || 0})
+        //   //   .attr('y', function (node) { return node.y || 0})
+        //   linkElements
+        //     .attr('x1', function (link) { return link.source.x || 0})
+        //     .attr('y1', function (link) { return link.source.y || 0})
+        //     .attr('x2', function (link) { return link.target.x || 0})
+        //     .attr('y2', function (link) { return link.target.y || 0})
+        // })
 
 
 
