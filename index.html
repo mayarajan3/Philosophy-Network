@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 
 <svg width="960" height="600">
-  <h3 id="school"></h3>
+  <h3 id="school" style="position:absolute; top:5%; left: 50%"></h3>
 </svg>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -236,7 +236,9 @@ d3.csv("neighbors.csv", function(data) {
 
   function selectNode(selectedNode) {
     if (selectedNode.group == 1) {
-      document.getElementById("school").innerText = selectedNode.label.replace("_", " ");
+      var label = selectedNode.label.replace("_", " ");
+      label = label.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      document.getElementById("school").innerText = label;
     } else {
       document.getElementById("school").innerText = selectedNode.label;
     }
