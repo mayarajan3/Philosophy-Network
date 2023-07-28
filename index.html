@@ -268,11 +268,7 @@ var deletedLinksDict = {};
 
 
 
-    for (let i = 0; i < originalLinks.length; i++) {
-      if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
 
-      }
-    }
 
 
     // Create a new set of links connecting the selected node to its neighbors
@@ -288,12 +284,15 @@ var deletedLinksDict = {};
     deletedNodesDict[selectedNode] = neighbors;
     var secondarySelectedNodeLinks = [];
     for (let i = 0; i < neighbors.length; i++) {
-      var secondaryNeighbors = getNeighbors(neighbors[i]);
-      console.log(neighbors[i]);
+      var foundNode = nodes.find(function (node) {
+          return node.id === neighbors[i];
+        })
+      var secondaryNeighbors = getNeighbors(foundNode);
+      console.log(foundNode);
       console.log(secondaryNeighbors);
       var temp = secondaryNeighbors.map(function (neighborId) {
       return {
-        source: neighbors[i],
+        source: foundNode,
         target: nodes.find(function (node) {
           return node.id === neighborId;
         }),
@@ -330,6 +329,7 @@ var deletedLinksDict = {};
     console.log(selectedNode);
     console.log("links");
     console.log(newLinks);
+    links = newLinks;
     // Update the linkElements to show the new links
     linkElements = linkElements.data(newLinks);
 
