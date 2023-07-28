@@ -517,6 +517,7 @@ d3.csv("neighbors.csv", function(data) {
     // we modify the styles to highlight selected nodes
     nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
     .style("visibility", function(node) {
+      console.log(node);
       if (!node.visible && node.group == 0) {
         return "hidden";
       }
