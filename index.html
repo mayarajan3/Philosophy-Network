@@ -383,12 +383,54 @@ var deletedLinksDict = {};
         //     .on('click', selectNode)
         //     .merge(nodeElements);
       } else {
+        // Restore all links from school to philosopher
+        // Restore all links from philosopher to others
+        // Remove all links from school
+
         var newLinks = [];
+
+        var neighbors = []
+        for (let i = 0; i < originalLinks.length; i++) {
+          if (links[i].source == selectedNode) {
+            neighbors.push(links[i].target);
+          } else if (links[i].target == selectedNode) {
+            neighbors.push(links[i].source);
+          }
+        }
+        //not connected to neighbors or selected node
         for (let i = 0; i < links.length; i++) {
-          if (!containsObject(links[i], newLinksDict[selectedNode])) {
+          if (links[i].source != selectedNode || links[i].target != selectedNode) {
             newLinks.push(links[i]);
           }
         }
+        //for each neighbor link, determine where it should go
+        for (let i = 0; i < neighbors.length; i++) {
+          let tempNeighbor = neighbors[i];
+          for (let i = 0; j < originalLinks.length; i++) {
+            if (originalLinks[i].source == tempNeighbor) {
+              var newLink = Object.assign({}, originalLinks[i]);
+              var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]]
+              if (nodes[schoolId].collapsed) {
+                newLink.target = nodes[schoolId];
+              }
+              newLinks.push(newLink);
+            } else if (originalLinks[i].target == tempNeighbor) {
+              var newLink = Object.assign({}, originalLinks[i]);
+              var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
+              if (nodes[schoolId].collapsed) {
+                newLink.source = nodes[schoolId];
+              }
+              newLinks.push(newLink);
+            }
+          }
+        }
+
+        for (let i = 0; j < originalLinks.length; i++) {
+          if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
+            newLinks.push(links[i]);
+          }
+        }
+
         for (let i = 0; i < deletedLinksDict[selectedNode].length; i++) {
           newLinks.push(deletedLinksDict[selectedNode][i]);
           console.log(deletedLinksDict[selectedNode][i]);
