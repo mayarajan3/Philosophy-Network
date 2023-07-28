@@ -65,6 +65,14 @@ function getNodeColor(node, neighbors) {
   return "url(#image-" + node.label + ")";
 }
 
+function getNodeSize(node, neighbors) {
+  if (node.group == 1) {
+    return 30;
+  } else {
+    return 10;
+  }
+}
+
 
 function getLinkColor(node, link) {
   return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
@@ -112,7 +120,7 @@ d3.csv("neighbors.csv", function(data) {
   for (var k = 0; k < keys.length; k++) {
     nodes.push({
         id: i,
-        group: 0,
+        group: 1,
         label: keys[k],
         level: 1
       });
@@ -165,6 +173,8 @@ d3.csv("neighbors.csv", function(data) {
     }
     return value; // For non-objects, return the original value
   });
+
+  var originalLinks = links;
 
   console.log(stringRepresentation);
   console.log(linkRepresentation);
@@ -230,7 +240,7 @@ d3.csv("neighbors.csv", function(data) {
     .selectAll("circle")
     .data(nodes)
     .enter().append("circle")
-      .attr("r", 10)
+      .attr("r", getNodeSize)
       .attr("fill", getNodeColor)
       .call(dragDrop)
       .on('click', selectNode)
@@ -253,7 +263,7 @@ d3.csv("neighbors.csv", function(data) {
     var neighbors = getNeighbors(selectedNode);
 
     // Create a new set of links connecting the selected node to its neighbors
-    var selectedNodeLinks = neighbors.map(function (neighborId) {
+    var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
       return {
         source: selectedNode,
         target: nodes.find(function (node) {
@@ -262,12 +272,38 @@ d3.csv("neighbors.csv", function(data) {
         strength: 0.7 // Set the desired strength for the new links
       };
     });
+
+    var secondarySelectedNodeLinks = [];
+    for (let i = 0; i < neighbors.length; i++) {
+      var secondaryNeighbors = getNeighbors(neighbors[i]);
+      var temp = secondaryNeighbors.map(function (neighborId) {
+      return {
+        source: neighbors[i],
+        target: nodes.find(function (node) {
+          return node.id === neighborId;
+        }),
+        strength: 0.7 // Set the desired strength for the new links
+      };
+      secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
+    });
+
+    }
     console.log(selectedNodeLinks);
     // Update the links array with the new links
     var newLinks = [];
     for (let i = 0; i < links.length; i++) {
-      if (containsObject(links[i], selectedNodeLinks) == false) {
+      if (containsObject(links[i], primarySelectedNodeLinks)) {
+      } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
+        var addedLink = links[i];
+        if (neighbors.includes(addedLink.source)) {
+          addedLink.target = selectedNode;
+        } else {
+          addedLink.source = selectedNode;
+        }
+         newLinks.push(addedLink);
+      } else {
         newLinks.push(links[i]);
+
       }
     }
 
