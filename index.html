@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
-<svg width="960" height="600"></svg>
+<svg width="960" height="600">
+  <h3 id="school"></h3>
+</svg>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
@@ -80,11 +82,9 @@ d3.csv("neighbors.csv", function(data) {
       if (!schools[data[k].school].includes(philosopher)) {
         schools[data[k].school].push(philosopher);
       }
-      console.log(neighbors)
       neighbors = neighbors.replace(/'/g, "\"");
       neighbors = JSON.parse(neighbors);
 
-      console.log(neighbors);
       dictPhil[philosopher] = i;
       dictNeighbors[philosopher] = neighbors;
       dictSchool[philosopher] = data[k].school;
@@ -153,8 +153,6 @@ d3.csv("neighbors.csv", function(data) {
   var originalLinks = [...links];
   var originalNodes = [...nodes];
 
-  console.log(stringRepresentation);
-  console.log(linkRepresentation);
 
   var width = window.innerWidth
   var height = window.innerHeight
@@ -237,6 +235,12 @@ d3.csv("neighbors.csv", function(data) {
 
 
   function selectNode(selectedNode) {
+    if (selectedNode.group == 1) {
+      document.getElementById("school").innerText = selectedNode.label.replace("_", " ");
+    } else {
+      document.getElementById("school").innerText = selectedNode.label;
+    }
+
     var neighbors = getNeighbors(selectedNode);
     if (selectedNode.group == 1 && selectedNode.collapsed == false) {
 
@@ -314,9 +318,6 @@ d3.csv("neighbors.csv", function(data) {
 
 
       } else {
-        // Restore all links from school to philosopher
-        // Restore all links from philosopher to others
-        // Remove all links from school
 
         var newLinks = [];
 
@@ -343,10 +344,7 @@ d3.csv("neighbors.csv", function(data) {
 
           }
         }
-        //for each neighbor link, determine where it should go
-        console.log("step 1");
-        console.log(newLinks);
-        var step2 = [];
+
         for (let j = 0; j < neighbors.length; j++) {
           let tempNeighbor = neighbors[j];
           for (let i = 0; i < originalLinks.length; i++) {
@@ -357,7 +355,6 @@ d3.csv("neighbors.csv", function(data) {
                 newLink.target = nodes[schoolId];
               }
               newLinks.push(newLink);
-              step2.push(newLink);
             } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
               var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
@@ -365,7 +362,6 @@ d3.csv("neighbors.csv", function(data) {
                 newLink.source = nodes[schoolId];
               }
               newLinks.push(newLink);
-              step2.push(newLink);
             }
           }
         }
@@ -381,21 +377,13 @@ d3.csv("neighbors.csv", function(data) {
             step3.push(originalLinks[i]);
           }
         }
-        console.log("step 3");
-        console.log(step3);
 
-        // for (let i = 0; i < deletedLinksDict[selectedNode].length; i++) {
-        //   newLinks.push(deletedLinksDict[selectedNode][i]);
-        //   console.log(deletedLinksDict[selectedNode][i]);
-        // }
         links = newLinks;
-        // Update the linkElements to show the new links
+
         linkElements = linkElements.data(newLinks);
 
-        // Remove any old links that are no longer needed
         linkElements.exit().remove();
 
-        // Append new links to the DOM
         linkElements = linkElements
           .enter()
           .append("line")
@@ -413,17 +401,13 @@ d3.csv("neighbors.csv", function(data) {
           nodes[deletedNodesDict[selectedNode][i].id].visible = true;
         }
 
-        // simulation.force("link").links(links)
-
 
       }
 
 
-    // Restart the simulation to apply the changes
     simulation.alpha(1).restart();
     neighbors = getNeighbors(selectedNode);
 
-    // we modify the styles to highlight selected nodes
     nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
     .style("visibility", function(node) {
       for (let i = 0; i < links.length; i++) {
