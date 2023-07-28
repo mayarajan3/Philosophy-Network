@@ -239,6 +239,7 @@ d3.csv("neighbors.csv", function(data) {
       .attr("fill", getNodeColor)
       .call(dragDrop)
       .on('click', selectNode)
+      .attr("stroke-width", 5)
       .style("stroke", node => node.collapsed ? "black" : "gray");
 
 
@@ -438,7 +439,9 @@ d3.csv("neighbors.csv", function(data) {
       }
       return "hidden";
     })
+    .attr("stroke-width", 5)
     .style("stroke", node => node.collapsed ? "black" : "gray");
+
     linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
   }
 
