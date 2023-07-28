@@ -383,8 +383,8 @@ d3.csv("neighbors.csv", function(data) {
         var step3 = [];
         for (let i = 0; i < originalLinks.length; i++) {
           if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
-            newLinks.push(links[i]);
-            step3.push(links[i]);
+            newLinks.push(originalLinks[i]);
+            step3.push(originalLinks[i]);
           }
         }
         console.log("step 3");
