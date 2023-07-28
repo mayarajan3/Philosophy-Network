@@ -356,8 +356,7 @@ var deletedLinksDict = {};
               var tempNode = selectedNode;
               tempNode.collapsed = true;
               newNodes.push(tempNode);
-            }
-            if (!neighbors.includes(nodes[i].id)) {
+            } else if (!neighbors.includes(nodes[i].id)) {
               newNodes.push(nodes[i])
             }
           }
@@ -369,7 +368,7 @@ var deletedLinksDict = {};
         nodeElements.exit().remove();
 
         // Append new links to the DOM
-        var nodeElements = svg.append("g")
+        nodeElements = svg.append("g")
             .enter().append("circle")
             .attr("r", getNodeSize)
             .attr("fill", getNodeColor)
