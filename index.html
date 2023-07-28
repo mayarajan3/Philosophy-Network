@@ -42,6 +42,8 @@ let i = 0;
 var dictPhil = {};
 var dictNeighbors = {};
 var philosophers = [];
+var schools = {};
+var dictSchool = {};
 
 function getNeighbors(node) {
   return links.reduce(function (neighbors, link) {
@@ -86,8 +88,7 @@ function getTextColor(node, neighbors) {
 
 d3.csv("neighbors.csv", function(data) {
 
-  var schools = {};
-  var dictSchool = {};
+
 
   for (var k = 0; k < data.length; k++) {
       console.log(data[k]);
@@ -257,11 +258,11 @@ d3.csv("neighbors.csv", function(data) {
     }
 
     return false;
-}
+  }
 
-var deletedNodesDict = {};
-var newLinksDict = {};
-var deletedLinksDict = {};
+  var deletedNodesDict = {};
+  var newLinksDict = {};
+  var deletedLinksDict = {};
 
 
   function selectNode(selectedNode) {
@@ -418,6 +419,7 @@ var deletedLinksDict = {};
               var newLink = Object.assign({}, originalLinks[i]);
               console.log(originalLinks[i].source.label);
               console.log(dictSchool[originalLinks[i].source.label]);
+              console.log(dictSchool);
               console.log(dictPhil[dictSchool[originalLinks[i].source.label]]);
               var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
               if (nodes[schoolId].collapsed) {
