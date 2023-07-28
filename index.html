@@ -371,6 +371,7 @@ var deletedLinksDict = {};
         // Append new links to the DOM
         nodeElements = svg.append("g")
             .enter().append("circle")
+            .attr("class", "nodes")
             .attr("r", getNodeSize)
             .attr("fill", getNodeColor)
             .call(dragDrop)
