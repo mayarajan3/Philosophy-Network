@@ -408,7 +408,7 @@ var deletedLinksDict = {};
           .attr("stroke-width", 1)
           .attr("stroke", "rgba(50, 50, 50, 0.2)")
           .merge(linkElements);
-        node[selectedNode].collapsed = false;
+        node[selectedNode.id].collapsed = false;
 
         //   var newNodes = nodes;
         //   for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
