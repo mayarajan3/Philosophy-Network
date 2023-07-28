@@ -405,9 +405,9 @@ d3.csv("neighbors.csv", function(data) {
           }
         }
         //for each neighbor link, determine where it should go
-        for (let i = 0; i < neighbors.length; i++) {
-          let tempNeighbor = neighbors[i];
-          for (let i = 0; j < originalLinks.length; i++) {
+        for (let j = 0; j < neighbors.length; j++) {
+          let tempNeighbor = neighbors[j];
+          for (let i = 0; i < originalLinks.length; i++) {
             if ((originalLinks[i].source == tempNeighbor) && (originalLinks[i].target != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
               var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]]
