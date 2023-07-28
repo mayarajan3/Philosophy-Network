@@ -257,8 +257,6 @@ d3.csv("neighbors.csv", function(data) {
               return node.id === neighbors[i];
             })
           var secondaryNeighbors = getNeighbors(foundNode);
-          console.log(foundNode);
-          console.log(secondaryNeighbors);
           var temp = secondaryNeighbors.map(function (neighborId) {
             return {
               source: foundNode,
@@ -271,7 +269,6 @@ d3.csv("neighbors.csv", function(data) {
           console.log(temp);
           secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
         }
-        console.log(secondarySelectedNodeLinks);
         var newLinks = [];
         newLinksDict[selectedNode] = [];
         deletedLinksDict[selectedNode] = [];
@@ -281,7 +278,6 @@ d3.csv("neighbors.csv", function(data) {
           } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
             var addedLink = Object.assign({}, links[i]);
             deletedLinksDict[selectedNode].push(links[i]);
-            console.log(neighbors);
             if (neighbors.includes(addedLink.source.id)) {
               addedLink.source = selectedNode;
             } else {
@@ -294,11 +290,7 @@ d3.csv("neighbors.csv", function(data) {
 
           }
         }
-        console.log(deletedLinksDict[selectedNode]);
 
-        console.log(selectedNode);
-        console.log("links");
-        console.log(newLinks);
         links = newLinks;
         linkElements = linkElements.data(newLinks);
 
@@ -364,10 +356,6 @@ d3.csv("neighbors.csv", function(data) {
               step2.push(newLink);
             } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
-              console.log(originalLinks[i].source.label);
-              console.log(dictSchool[originalLinks[i].source.label]);
-              console.log(dictSchool);
-              console.log(dictPhil[dictSchool[originalLinks[i].source.label]]);
               var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
               if (nodes[schoolId].collapsed) {
                 newLink.source = nodes[schoolId];
@@ -383,6 +371,8 @@ d3.csv("neighbors.csv", function(data) {
         var step3 = [];
         for (let i = 0; i < originalLinks.length; i++) {
           if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
+            nodes[originalLinks[i].source.id].visible = true;
+            nodes[originalLinks[i].target.id].visible = true;
             newLinks.push(originalLinks[i]);
             step3.push(originalLinks[i]);
           }
