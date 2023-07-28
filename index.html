@@ -176,6 +176,7 @@ d3.csv("neighbors.csv", function(data) {
   });
 
   var originalLinks = links;
+  var originalNodes = nodes;
 
   console.log(stringRepresentation);
   console.log(linkRepresentation);
@@ -344,6 +345,37 @@ var deletedLinksDict = {};
           .attr("stroke-width", 1)
           .attr("stroke", "rgba(50, 50, 50, 0.2)")
           .merge(linkElements);
+
+
+
+          selectedNode.collapsed = true;
+
+          var newNodes = [];
+          for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].id == selectedNode.id) {
+              var tempNode = selectedNode;
+              tempNode.collapsed = true;
+              newNodes.push(tempNode);
+            }
+            if (!neighbors.includes(nodes[i].id)) {
+              newNodes.push(nodes[i])
+            }
+          }
+          nodes = newNodes;
+        // Update the linkElements to show the new links
+        nodeElements = nodeElements.data(newNodes);
+
+        // Remove any old links that are no longer needed
+        nodeElements.exit().remove();
+
+        // Append new links to the DOM
+        var nodeElements = svg.append("g")
+            .enter().append("circle")
+            .attr("r", getNodeSize)
+            .attr("fill", getNodeColor)
+            .call(dragDrop)
+            .on('click', selectNode)
+            .merge(nodeElements);
       } else {
 
       }
