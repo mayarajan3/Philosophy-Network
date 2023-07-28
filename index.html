@@ -365,16 +365,12 @@ d3.csv("neighbors.csv", function(data) {
             }
           }
         }
-        console.log("step 2");
-        console.log(step2);
 
-        var step3 = [];
         for (let i = 0; i < originalLinks.length; i++) {
           if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
             nodes[originalLinks[i].source.id].visible = true;
             nodes[originalLinks[i].target.id].visible = true;
             newLinks.push(originalLinks[i]);
-            step3.push(originalLinks[i]);
           }
         }
 
