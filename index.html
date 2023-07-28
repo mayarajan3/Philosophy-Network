@@ -196,7 +196,7 @@ d3.csv("neighbors.csv", function(data) {
         .attr("id", "image-" + nodes[y].label)
         .append("svg:image")
         .attr("xlink:href", function(node) {
-          if (node.label == "aristotle" || node.label == "plato") {
+          if (node.label == "aristotle" || node.label == "plato" || node.label == "nietzsche") {
             return "images/" + nodes[y].label + "2.jpg";
           } else {
             return "images/" + nodes[y].label + ".jpg"
