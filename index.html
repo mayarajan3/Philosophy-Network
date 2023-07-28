@@ -500,6 +500,7 @@ d3.csv("neighbors.csv", function(data) {
 
 
         for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
+          console.log(deletedNodesDict[selectedNode][i].id);
           nodes[deletedNodesDict[selectedNode][i].id].visible = true;
         }
 
