@@ -7,11 +7,25 @@
     background-image: url( 'images/paper_background.jpg' );
     background-size: cover;
   }
+
+  .title {
+    position: absolute;
+    z-index: -1;
+    width: 50%;
+    left: 25%;
+    top: 5%;
+    text-align: center;
+
+    h3 {
+      font-size: 40px;
+      font-weight: 200;
+    }
+  }
 </style>
 
 <svg width="960" height="600">
-  <div style="position:absolute; z-index: -1; width: 50%; left:25%; top:5%; text-align:center">
-    <h3 id="school" style="font-family:Papyrus; font-size: 40px">Network of Philosophies</h3>
+  <div class="title">
+    <h3 id="school">Network of Philosophies</h3>
   </div>
 </svg>
 
@@ -87,8 +101,7 @@ d3.csv("neighbors.csv", function(data) {
         id: i,
         group: 0,
         label: philosopher,
-        level: 1,
-        visible: true
+        level: 1
       });
       if (!(data[k].school in schools)) {
         schools[data[k].school] = [];
@@ -113,8 +126,7 @@ d3.csv("neighbors.csv", function(data) {
         group: 1,
         label: keys[k],
         level: 1,
-        collapsed: false,
-        visible: true
+        collapsed: false
       });
     dictPhil[keys[k]] = i;
     i = i + 1;
@@ -129,7 +141,7 @@ d3.csv("neighbors.csv", function(data) {
             links.push({
             target: dictPhil[dictNeighbors[philosophers[k]][j]],
             source: dictPhil[philosophers[k]],
-            strength: 0.1
+            strength: 0.7
             });
           }
 
@@ -144,13 +156,13 @@ d3.csv("neighbors.csv", function(data) {
         links.push({
             target: dictPhil[philosopherSchools[j]],
             source: dictPhil[keys[k]],
-            strength: 0.1
+            strength: 0.7
             });
       }
     }
   }
 
-  var stringRepresentation = JSON.stringify(nodes, function(key, value) {
+  var nodeRepresentation = JSON.stringify(nodes, function(key, value) {
     if (typeof value === 'object' && value !== null) {
       return JSON.stringify(value);
     }
@@ -257,10 +269,6 @@ d3.csv("neighbors.csv", function(data) {
     return false;
   }
 
-  var deletedNodesDict = {};
-  var newLinksDict = {};
-  var deletedLinksDict = {};
-
 
   function selectNode(selectedNode) {
     if (selectedNode.group == 1) {
@@ -274,14 +282,10 @@ d3.csv("neighbors.csv", function(data) {
     var neighbors = getNeighbors(selectedNode);
     if (selectedNode.group == 1 && selectedNode.collapsed == false) {
 
-      deletedNodesDict[selectedNode] = [];
-
         var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
           var foundNode = nodes.find(function (node) {
               return node.id === neighborId;
             });
-          deletedNodesDict[selectedNode].push(foundNode);
-          nodes[foundNode.id].visible = false;
           return {
             source: selectedNode,
             target: foundNode,
@@ -308,20 +312,16 @@ d3.csv("neighbors.csv", function(data) {
           secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
         }
         var newLinks = [];
-        newLinksDict[selectedNode] = [];
-        deletedLinksDict[selectedNode] = [];
         for (let i = 0; i < links.length; i++) {
           if (containsObject(links[i], primarySelectedNodeLinks)) {
-            deletedLinksDict[selectedNode].push(links[i]);
+            // Ignore
           } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
             var addedLink = Object.assign({}, links[i]);
-            deletedLinksDict[selectedNode].push(links[i]);
             if (neighbors.includes(addedLink.source.id)) {
               addedLink.source = selectedNode;
             } else {
               addedLink.target = selectedNode;
             }
-            newLinksDict[selectedNode].push(addedLink);
             newLinks.push(addedLink);
           } else {
             newLinks.push(links[i]);
@@ -341,8 +341,6 @@ d3.csv("neighbors.csv", function(data) {
           .attr("stroke-width", 1)
           .attr("stroke", "rgba(50, 50, 50, 0.2)")
           .merge(linkElements);
-
-
 
           nodes[selectedNode.id].collapsed = true;
 
@@ -398,8 +396,6 @@ d3.csv("neighbors.csv", function(data) {
 
         for (let i = 0; i < originalLinks.length; i++) {
           if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
-            nodes[originalLinks[i].source.id].visible = true;
-            nodes[originalLinks[i].target.id].visible = true;
             newLinks.push(originalLinks[i]);
           }
         }
@@ -418,15 +414,6 @@ d3.csv("neighbors.csv", function(data) {
           .attr("stroke", "rgba(50, 50, 50, 0.2)")
           .merge(linkElements);
         nodes[selectedNode.id].collapsed = false;
-
-
-
-        console.log(deletedNodesDict[selectedNode]);
-        for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
-          console.log(deletedNodesDict[selectedNode][i].id);
-          nodes[deletedNodesDict[selectedNode][i].id].visible = true;
-        }
-
 
       }
 
@@ -483,7 +470,6 @@ d3.csv("neighbors.csv", function(data) {
       .attr('x2', function (link) { return link.target.x || 0})
       .attr('y2', function (link) { return link.target.y || 0})
   })
-
 
 
   simulation.force("link").links(links)
