@@ -391,10 +391,10 @@ var deletedLinksDict = {};
 
         var neighbors = []
         for (let i = 0; i < originalLinks.length; i++) {
-          if (links[i].source == selectedNode) {
-            neighbors.push(links[i].target);
-          } else if (links[i].target == selectedNode) {
-            neighbors.push(links[i].source);
+          if (originalLinks[i].source == selectedNode) {
+            neighbors.push(originalLinks[i].target);
+          } else if (originalLinks[i].target == selectedNode) {
+            neighbors.push(originalLinks[i].source);
           }
         }
         //not connected to neighbors or selected node
