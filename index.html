@@ -422,8 +422,23 @@ var deletedLinksDict = {};
             nodeElements.exit().remove();
           }
 
-        simulation.nodes(nodes);
-        simulation.force("link").links(links);
+        simulation.nodes(nodes).on('tick', () => {
+          nodeElements
+            .attr('cx', function (node) { return node.x || 0})
+            .attr('cy', function (node) { return node.y || 0})
+          // textElements
+          //   .attr('x', function (node) { return node.x || 0})
+          //   .attr('y', function (node) { return node.y || 0})
+          linkElements
+            .attr('x1', function (link) { return link.source.x || 0})
+            .attr('y1', function (link) { return link.source.y || 0})
+            .attr('x2', function (link) { return link.target.x || 0})
+            .attr('y2', function (link) { return link.target.y || 0})
+        })
+
+
+
+        simulation.force("link").links(links)
 
 
       }
