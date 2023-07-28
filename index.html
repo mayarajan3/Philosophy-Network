@@ -410,13 +410,13 @@ var deletedLinksDict = {};
           var newNodes = nodes;
           for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
             newNodes.push(deletedNodesDict[selectedNode][i])
-            nodeEnter = node.enter().append("circle")
+            nodeEnter = nodeElements.enter().append("circle")
                 .attr("r", getNodeSize)
                 .attr("fill", getNodeColor)
                 .call(dragDrop)
                 .on('click', selectNode)
 
-            nodeElements = nodeEnter.merge(nodeElements);
+            nodeElements = nodeElements.merge(nodeEnter);
 
         // Exit any old nodes
             nodeElements.exit().remove();
