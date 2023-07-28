@@ -270,18 +270,21 @@ var deletedLinksDict = {};
 
 
 
-
+    deletedNodesDict[selectedNode] = [];
     if (selectedNode.group == 1 && selectedNode.collapsed == false) {
       // Create a new set of links connecting the selected node to its neighbors
         var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
+          var foundNode = nodes.find(function (node) {
+              return node.id === neighborId;
+            });
+          deletedNodesDict[selectedNode].push(foundNode);
           return {
             source: selectedNode,
-            target: nodes.find(function (node) {
-              return node.id === neighborId;
-            }),
+            target: foundNode,
             strength: 0.7 // Set the desired strength for the new links
           };
         });
+
         deletedNodesDict[selectedNode] = neighbors;
         var secondarySelectedNodeLinks = [];
         for (let i = 0; i < neighbors.length; i++) {
