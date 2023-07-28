@@ -78,6 +78,9 @@ function getTextColor(node, neighbors) {
 
 d3.csv("neighbors.csv", function(data) {
 
+  var schools = {};
+  var dictSchool = {};
+
   for (var k = 0; k < data.length; k++) {
       console.log(data[k]);
       neighbors = data[k].neighbors;
@@ -88,7 +91,12 @@ d3.csv("neighbors.csv", function(data) {
         label: philosopher,
         level: 1
       });
-
+      if (!(data[k].school in schools)) {
+        schools[data[k].school] = [];
+      }
+      if (!schools[data[k].school].includes(philosopher)) {
+        schools[data[k].school].push(philosopher);
+      }
       console.log(neighbors)
       neighbors = neighbors.replace(/'/g, "\"");
       neighbors = JSON.parse(neighbors);
@@ -96,8 +104,20 @@ d3.csv("neighbors.csv", function(data) {
       console.log(neighbors);
       dictPhil[philosopher] = i;
       dictNeighbors[philosopher] = neighbors;
+      dictSchool[philosopher] = data[k].school;
       philosophers.push(philosopher)
       i = i + 1;
+  }
+  const keys = Object.keys(schools);
+  for (var k = 0; k < keys.length; k++) {
+    nodes.push({
+        id: i,
+        group: 0,
+        label: keys[k],
+        level: 1
+      });
+    dictPhil[keys[k]] = i;
+    i = i + 1;
   }
   for (var k = 0; k < philosophers.length; k++) {
     for (let j = 0; j < dictNeighbors[philosophers[k]].length; j++) {
@@ -105,12 +125,27 @@ d3.csv("neighbors.csv", function(data) {
       console.log(dictPhil);
       if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
         if ((typeof dictPhil[dictNeighbors[philosophers[k]][j]] == 'number') && (typeof dictPhil[philosophers[k]] == 'number')) {
-          links.push({
+          if (!(dictSchool[dictNeighbors[philosophers[k]][j]] == dictSchool[philosophers[k]])) {
+            links.push({
             target: dictPhil[dictNeighbors[philosophers[k]][j]],
             source: dictPhil[philosophers[k]],
             strength: 0.1
-          });
+            });
+          }
+
         }
+      }
+    }
+  }
+  for (var k = 0; k < keys.length; k++) {
+    var philosopherSchools = schools[keys[i]];
+    for (var j = 0; j < philosopherSchools.length; j++) {
+      if ((typeof dictPhil[philosopherSchools[j]] == 'number') && (typeof dictPhil[keys[k]] == 'number')) {
+        links.push({
+            target: dictPhil[philosopherSchools[j]],
+            source: dictPhil[keys[k]],
+            strength: 0.1
+            });
       }
     }
   }
