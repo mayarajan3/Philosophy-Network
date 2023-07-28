@@ -239,6 +239,7 @@ d3.csv("neighbors.csv", function(data) {
       .attr("fill", getNodeColor)
       .call(dragDrop)
       .on('click', selectNode)
+      .style("stroke", node => node.collapsed ? "black" : "gray");
 
 
   function containsObject(obj, list) {
@@ -436,7 +437,8 @@ d3.csv("neighbors.csv", function(data) {
         }
       }
       return "hidden";
-    });
+    })
+    .style("stroke", node => node.collapsed ? "black" : "gray");
     linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
   }
 
