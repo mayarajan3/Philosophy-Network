@@ -258,6 +258,8 @@ d3.csv("neighbors.csv", function(data) {
     return false;
 }
 
+var deletedNodes = {}
+
   function selectNode(selectedNode) {
     var neighbors = getNeighbors(selectedNode);
 
@@ -292,6 +294,7 @@ d3.csv("neighbors.csv", function(data) {
         }),
         strength: 0.7 // Set the desired strength for the new links
       };
+      console.log(temp);
       secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
     });
 
