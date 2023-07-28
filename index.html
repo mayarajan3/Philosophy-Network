@@ -409,25 +409,20 @@ var deletedLinksDict = {};
           var newNodes = nodes;
           for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
             newNodes.push(deletedNodesDict[selectedNode][i])
+            nodeEnter = node.enter().append("circle")
+                .attr("r", getNodeSize)
+                .attr("fill", getNodeColor)
+                .call(dragDrop)
+                .on('click', selectNode)
+
+            nodeElements = nodeEnter.merge(nodeElements);
+
+        // Exit any old nodes
+            nodeElements.exit().remove();
           }
-          nodes = newNodes;
-        console.log(newNodes);
-        // Update the linkElements to show the new links
-        nodeElements = nodeElements.data(newNodes);
 
-        nodeElements.exit().remove();
-
-        // Append new nodes to the DOM
-        nodeElements = nodeElements
-          .enter()
-          .append("circle")
-          .attr("r", getNodeSize)
-          .attr("fill", getNodeColor)
-          .call(dragDrop)
-          .on('click', selectNode)
-          .merge(nodeElements);
-        simulation.nodes(nodes);
-        simulation.force("link").links(links);
+        // simulation.nodes(nodes);
+        // simulation.force("link").links(links);
 
 
       }
