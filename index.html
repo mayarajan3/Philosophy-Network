@@ -70,6 +70,10 @@ function getLinkColor(node, link) {
   return isNeighborLink(node, link) ? '#161616' : '#cecece'
 }
 
+function getLinkWidth(node, link) {
+  return isNeighborLink(node, link) ? '2' : '1'
+}
+
 function getTextColor(node, neighbors) {
   return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
 }
@@ -443,6 +447,7 @@ d3.csv("neighbors.csv", function(data) {
     .style("stroke", node => node.collapsed ? "black" : "gray");
 
     linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+    .attr('stroke-width', function(link) { return getLinkWidth(selectedNode, link) })
   }
 
 
