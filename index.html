@@ -64,7 +64,12 @@ function isNeighborLink(node, link) {
 
 
 function getNodeColor(node, neighbors) {
-  return "url(#image-" + node.label + ")";
+  if (node.group == 0) {
+    return "url(#image-" + node.label + ")";
+  } else {
+    return "yellow";
+  }
+
 }
 
 function getNodeSize(node, neighbors) {
@@ -273,8 +278,9 @@ d3.csv("neighbors.csv", function(data) {
 
 
 
-    deletedNodesDict[selectedNode] = [];
+
     if (selectedNode.group == 1 && selectedNode.collapsed == false) {
+      deletedNodesDict[selectedNode] = [];
       // Create a new set of links connecting the selected node to its neighbors
         var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
           var foundNode = nodes.find(function (node) {
