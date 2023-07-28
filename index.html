@@ -122,7 +122,8 @@ d3.csv("neighbors.csv", function(data) {
         id: i,
         group: 1,
         label: keys[k],
-        level: 1
+        level: 1,
+        collapsed: false,
       });
     dictPhil[keys[k]] = i;
     i = i + 1;
@@ -288,7 +289,7 @@ d3.csv("neighbors.csv", function(data) {
     });
 
     }
-    console.log(selectedNodeLinks);
+    console.log(secondarySelectedNodeLinks);
     // Update the links array with the new links
     var newLinks = [];
     for (let i = 0; i < links.length; i++) {
