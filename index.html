@@ -13,6 +13,7 @@ var dictNeighbors = {};
 var philosophers = [];
 var schools = {};
 var dictSchool = {};
+var schoolThreshold;
 
 function getNeighbors(node) {
   return links.reduce(function (neighbors, link) {
@@ -86,6 +87,7 @@ d3.csv("neighbors.csv", function(data) {
       philosophers.push(philosopher)
       i = i + 1;
   }
+  schoolThreshold = i;
   const keys = Object.keys(schools);
   for (var k = 0; k < keys.length; k++) {
     nodes.push({
@@ -314,33 +316,7 @@ d3.csv("neighbors.csv", function(data) {
 
           nodes[selectedNode.id].collapsed = true;
 
-        //   var newNodes = [];
-        //   for (let i = 0; i < nodes.length; i++) {
-        //     if (nodes[i].id == selectedNode.id) {
-        //       var tempNode = selectedNode;
-        //       tempNode.collapsed = true;
-        //       newNodes.push(tempNode);
-        //     } else if (!neighbors.includes(nodes[i].id)) {
-        //       newNodes.push(nodes[i])
-        //     }
-        //   }
-        // nodes = newNodes;
-        // console.log(newNodes);
-        // // Update the linkElements to show the new links
-        // nodeElements = nodeElements.data(newNodes);
 
-        // // Remove any old links that are no longer needed
-        // nodeElements.exit().remove();
-
-        // Append new links to the DOM
-        // nodeElements = svg.append("g")
-        //     .enter().append("circle")
-        //     .attr("class", "nodes")
-        //     .attr("r", getNodeSize)
-        //     .attr("fill", getNodeColor)
-        //     .call(dragDrop)
-        //     .on('click', selectNode)
-        //     .merge(nodeElements);
       } else {
         // Restore all links from school to philosopher
         // Restore all links from philosopher to others
@@ -403,10 +379,10 @@ d3.csv("neighbors.csv", function(data) {
           }
         }
 
-        for (let i = 0; i < deletedLinksDict[selectedNode].length; i++) {
-          newLinks.push(deletedLinksDict[selectedNode][i]);
-          console.log(deletedLinksDict[selectedNode][i]);
-        }
+        // for (let i = 0; i < deletedLinksDict[selectedNode].length; i++) {
+        //   newLinks.push(deletedLinksDict[selectedNode][i]);
+        //   console.log(deletedLinksDict[selectedNode][i]);
+        // }
         links = newLinks;
         // Update the linkElements to show the new links
         linkElements = linkElements.data(newLinks);
