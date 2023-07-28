@@ -412,6 +412,20 @@ var deletedLinksDict = {};
         // Update the linkElements to show the new links
         nodeElements = nodeElements.data(newNodes);
 
+        nodeElements.exit().remove();
+
+        // Append new nodes to the DOM
+        nodeElements = nodeElements
+          .enter()
+          .append("circle")
+          .attr("r", getNodeSize)
+          .attr("fill", getNodeColor)
+          .call(dragDrop)
+          .on('click', selectNode)
+          .merge(nodeElements);
+        simulation.nodes(nodes);
+        simulation.force("link").links(links);
+
 
       }
 
