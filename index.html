@@ -316,6 +316,7 @@ var deletedLinksDict = {};
             deletedLinksDict[selectedNode].push(links[i]);
           } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
             var addedLink = links[i];
+            deletedLinksDict[selectedNode].push(links[i]);
             console.log(neighbors);
             if (neighbors.includes(addedLink.source.id)) {
               addedLink.source = selectedNode;
