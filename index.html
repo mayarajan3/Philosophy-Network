@@ -378,15 +378,17 @@ d3.csv("neighbors.csv", function(data) {
           }
         }
         console.log("step 2");
-        console.log(newLinks);
+        console.log(step2);
 
+        var step3 = [];
         for (let i = 0; i < originalLinks.length; i++) {
           if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
             newLinks.push(links[i]);
+            step3.push(links[i]);
           }
         }
         console.log("step 3");
-        console.log(newLinks);
+        console.log(step3);
 
         // for (let i = 0; i < deletedLinksDict[selectedNode].length; i++) {
         //   newLinks.push(deletedLinksDict[selectedNode][i]);
