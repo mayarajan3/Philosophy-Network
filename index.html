@@ -37,7 +37,11 @@ function getNodeColor(node, neighbors) {
   if (node.group == 0) {
     return "url(#image-" + node.label + ")";
   } else {
-    return "yellow";
+    if (node.collapsed) {
+      return "blue"''
+    } else {
+      return "pink";
+    }
   }
 
 }
