@@ -250,8 +250,6 @@ d3.csv("neighbors.csv", function(data) {
   function containsObject(obj, list) {
     var i;
     for (i = 0; i < list.length; i++) {
-        console.log(list[i]);
-        console.log(obj);
         if ((list[i].target == obj.target && list[i].source == obj.source) || (list[i].source == obj.target && list[i].target == obj.source)) {
             return true;
         }
@@ -262,6 +260,15 @@ d3.csv("neighbors.csv", function(data) {
 
   function selectNode(selectedNode) {
     var neighbors = getNeighbors(selectedNode);
+
+
+
+    for (let i = 0; i < originalLinks.length; i++) {
+      if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
+
+      }
+    }
+
 
     // Create a new set of links connecting the selected node to its neighbors
     var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
@@ -297,9 +304,9 @@ d3.csv("neighbors.csv", function(data) {
       } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
         var addedLink = links[i];
         if (neighbors.includes(addedLink.source)) {
-          addedLink.target = selectedNode;
-        } else {
           addedLink.source = selectedNode;
+        } else {
+          addedLink.target = selectedNode;
         }
          newLinks.push(addedLink);
       } else {
