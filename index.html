@@ -408,14 +408,14 @@ d3.csv("neighbors.csv", function(data) {
         for (let i = 0; i < neighbors.length; i++) {
           let tempNeighbor = neighbors[i];
           for (let i = 0; j < originalLinks.length; i++) {
-            if (originalLinks[i].source == tempNeighbor) {
+            if ((originalLinks[i].source == tempNeighbor) && (originalLinks[i].target != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
               var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]]
               if (nodes[schoolId].collapsed) {
                 newLink.target = nodes[schoolId];
               }
               newLinks.push(newLink);
-            } else if (originalLinks[i].target == tempNeighbor) {
+            } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
               console.log(originalLinks[i].source.label);
               console.log(dictSchool[originalLinks[i].source.label]);
