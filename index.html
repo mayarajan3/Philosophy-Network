@@ -5,37 +5,6 @@
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
-// var nodes = [
-//   { id: "mammal", group: 0, label: "Mammals", level: 1 },
-//   { id: "dog"   , group: 0, label: "Dogs"   , level: 2 },
-//   { id: "cat"   , group: 0, label: "Cats"   , level: 2 },
-//   { id: "fox"   , group: 0, label: "Foxes"  , level: 2 },
-//   { id: "elk"   , group: 0, label: "Elk"    , level: 2 },
-//   { id: "insect", group: 1, label: "Insects", level: 1 },
-//   { id: "ant"   , group: 1, label: "Ants"   , level: 2 },
-//   { id: "bee"   , group: 1, label: "Bees"   , level: 2 },
-//   { id: "fish"  , group: 2, label: "Fish"   , level: 1 },
-//   { id: "carp"  , group: 2, label: "Carp"   , level: 2 },
-//   { id: "pike"  , group: 2, label: "Pikes"  , level: 2 }
-// ]
-
-// var links = [
-//   { target: "mammal", source: "dog" , strength: 0.7 },
-//   { target: "mammal", source: "cat" , strength: 0.7 },
-//   { target: "mammal", source: "fox" , strength: 0.7 },
-//   { target: "mammal", source: "elk" , strength: 0.7 },
-//   { target: "insect", source: "ant" , strength: 0.7 },
-//   { target: "insect", source: "bee" , strength: 0.7 },
-//   { target: "fish"  , source: "carp", strength: 0.7 },
-//   { target: "fish"  , source: "pike", strength: 0.7 },
-//   { target: "cat"   , source: "elk" , strength: 0.1 },
-//   { target: "carp"  , source: "ant" , strength: 0.1 },
-//   { target: "elk"   , source: "bee" , strength: 0.1 },
-//   { target: "dog"   , source: "cat" , strength: 0.1 },
-//   { target: "fox"   , source: "ant" , strength: 0.1 },
-//   { target: "pike"  , source: "cat" , strength: 0.1 }
-// ]
-
 var nodes = [];
 var links = [];
 let i = 0;
@@ -74,12 +43,11 @@ function getNodeColor(node, neighbors) {
 
 function getNodeSize(node, neighbors) {
   if (node.group == 1) {
-    return 30;
+    return 15;
   } else {
     return 10;
   }
 }
-
 
 function getLinkColor(node, link) {
   return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
@@ -89,12 +57,7 @@ function getTextColor(node, neighbors) {
   return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
 }
 
-
-
 d3.csv("neighbors.csv", function(data) {
-
-
-
   for (var k = 0; k < data.length; k++) {
       console.log(data[k]);
       neighbors = data[k].neighbors;
@@ -168,19 +131,17 @@ d3.csv("neighbors.csv", function(data) {
   }
 
   var stringRepresentation = JSON.stringify(nodes, function(key, value) {
-  // Customize the representation of each object here
     if (typeof value === 'object' && value !== null) {
-      return JSON.stringify(value); // For example, this returns a stringified version of the object
+      return JSON.stringify(value);
     }
-    return value; // For non-objects, return the original value
+    return value;
   });
 
   var linkRepresentation = JSON.stringify(links, function(key, value) {
-  // Customize the representation of each object here
     if (typeof value === 'object' && value !== null) {
-      return JSON.stringify(value); // For example, this returns a stringified version of the object
+      return JSON.stringify(value);
     }
-    return value; // For non-objects, return the original value
+    return value;
   });
 
   var originalLinks = links;
@@ -195,7 +156,6 @@ d3.csv("neighbors.csv", function(data) {
   var svg = d3.select('svg')
   svg.attr('width', width).attr('height', height)
 
-  // simulation setup with all forces
   var linkForce = d3
     .forceLink()
     .strength(function (link) { return link.strength })
@@ -225,16 +185,15 @@ d3.csv("neighbors.csv", function(data) {
     var defs = svg.append("svg:defs");
 
      defs.append("svg:pattern")
-            .attr("width", 1)
-            .attr("height", 1)
-            //.attr("patternUnits", "userSpaceOnUse")
-            .attr("id", "image-" + nodes[y].label)
-            .append("svg:image")
-            .attr("xlink:href", "images/" + nodes[y].label + ".jpg")
-            .attr("width", 30)
-            .attr("height", 30)
-            .attr("x", -4)
-            .attr("y", -5);
+        .attr("width", 1)
+        .attr("height", 1)
+        .attr("id", "image-" + nodes[y].label)
+        .append("svg:image")
+        .attr("xlink:href", "images/" + nodes[y].label + ".jpg")
+        .attr("width", 30)
+        .attr("height", 30)
+        .attr("x", -4)
+        .attr("y", -5);
   }
 
   var linkElements = svg.append("g")
@@ -263,7 +222,6 @@ d3.csv("neighbors.csv", function(data) {
             return true;
         }
     }
-
     return false;
   }
 
@@ -274,14 +232,10 @@ d3.csv("neighbors.csv", function(data) {
 
   function selectNode(selectedNode) {
     var neighbors = getNeighbors(selectedNode);
-
-
-
-
-
     if (selectedNode.group == 1 && selectedNode.collapsed == false) {
+
       deletedNodesDict[selectedNode] = [];
-      // Create a new set of links connecting the selected node to its neighbors
+
         var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
           var foundNode = nodes.find(function (node) {
               return node.id === neighborId;
@@ -291,11 +245,10 @@ d3.csv("neighbors.csv", function(data) {
           return {
             source: selectedNode,
             target: foundNode,
-            strength: 0.7 // Set the desired strength for the new links
+            strength: 0.7
           };
         });
 
-        deletedNodesDict[selectedNode] = neighbors;
         var secondarySelectedNodeLinks = [];
         for (let i = 0; i < neighbors.length; i++) {
           var foundNode = nodes.find(function (node) {
@@ -310,14 +263,13 @@ d3.csv("neighbors.csv", function(data) {
               target: nodes.find(function (node) {
                 return node.id === neighborId;
               }),
-              strength: 0.7 // Set the desired strength for the new links
+              strength: 0.7
             };
           });
           console.log(temp);
           secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
         }
         console.log(secondarySelectedNodeLinks);
-        // Update the links array with the new links
         var newLinks = [];
         newLinksDict[selectedNode] = [];
         deletedLinksDict[selectedNode] = [];
@@ -346,13 +298,10 @@ d3.csv("neighbors.csv", function(data) {
         console.log("links");
         console.log(newLinks);
         links = newLinks;
-        // Update the linkElements to show the new links
         linkElements = linkElements.data(newLinks);
 
-        // Remove any old links that are no longer needed
         linkElements.exit().remove();
 
-        // Append new links to the DOM
         linkElements = linkElements
           .enter()
           .append("line")
