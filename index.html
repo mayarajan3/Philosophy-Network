@@ -93,7 +93,6 @@ function getTextColor(node, neighbors) {
 
 d3.csv("neighbors.csv", function(data) {
   for (var k = 0; k < data.length; k++) {
-      console.log(data[k]);
       neighbors = data[k].neighbors;
       philosopher = data[k].philosopher;
       nodes.push({
@@ -132,8 +131,6 @@ d3.csv("neighbors.csv", function(data) {
   }
   for (var k = 0; k < philosophers.length; k++) {
     for (let j = 0; j < dictNeighbors[philosophers[k]].length; j++) {
-      console.log(dictNeighbors[philosophers[k]][j]);
-      console.log(dictPhil);
       if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
         if ((typeof dictPhil[dictNeighbors[philosophers[k]][j]] == 'number') && (typeof dictPhil[philosophers[k]] == 'number')) {
           if (!(dictSchool[dictNeighbors[philosophers[k]][j]] == dictSchool[philosophers[k]])) {
@@ -307,7 +304,6 @@ d3.csv("neighbors.csv", function(data) {
               strength: 0.7
             };
           });
-          console.log(temp);
           secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
         }
         var newLinks = [];
