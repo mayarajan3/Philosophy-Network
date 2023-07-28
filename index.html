@@ -258,7 +258,10 @@ d3.csv("neighbors.csv", function(data) {
     return false;
 }
 
-var deletedNodes = {}
+var deletedNodesDict = {};
+var newLinksDict = {};
+var deletedLinksDict = {};
+
 
   function selectNode(selectedNode) {
     var neighbors = getNeighbors(selectedNode);
@@ -282,10 +285,12 @@ var deletedNodes = {}
         strength: 0.7 // Set the desired strength for the new links
       };
     });
-
+    deletedNodesDict[selectedNode] = neighbors;
     var secondarySelectedNodeLinks = [];
     for (let i = 0; i < neighbors.length; i++) {
       var secondaryNeighbors = getNeighbors(neighbors[i]);
+      console.log(neighbors[i]);
+      console.log(secondaryNeighbors);
       var temp = secondaryNeighbors.map(function (neighborId) {
       return {
         source: neighbors[i],
@@ -302,8 +307,11 @@ var deletedNodes = {}
     console.log(secondarySelectedNodeLinks);
     // Update the links array with the new links
     var newLinks = [];
+    newLinksDict[selectedNode] = [];
+    deletedLinksDict[selectedNode] = [];
     for (let i = 0; i < links.length; i++) {
       if (containsObject(links[i], primarySelectedNodeLinks)) {
+        deletedLinksDict[selectedNode].push(links[i]);
       } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
         var addedLink = links[i];
         if (neighbors.includes(addedLink.source)) {
@@ -311,6 +319,7 @@ var deletedNodes = {}
         } else {
           addedLink.target = selectedNode;
         }
+        newLinksDict[selectedNode].push(addedLink);
          newLinks.push(addedLink);
       } else {
         newLinks.push(links[i]);
