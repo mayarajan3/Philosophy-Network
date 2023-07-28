@@ -41,10 +41,10 @@ function getNodeColor(node, neighbors) {
   if (node.group == 0) {
     return "url(#image-" + node.label + ")";
   } else {
-    if (node.collapsed) {
-      return "blue";
+    if (node.label == "aristotle" || node.label == "plato") {
+      return "url(#image-" + node.label + "2)";
     } else {
-      return "pink";
+      return "url(#image-" + node.label + ")";
     }
   }
 
@@ -189,8 +189,20 @@ d3.csv("neighbors.csv", function(data) {
 
   for (let y = 0; y < nodes.length; y++) {
     var defs = svg.append("svg:defs");
+    if (nodes[y].group == 1 && (nodes[y].label == "aristotle" || nodes[y].label == "plato")) {
 
      defs.append("svg:pattern")
+        .attr("width", 1)
+        .attr("height", 1)
+        .attr("id", "image-" + nodes[y].label)
+        .append("svg:image")
+        .attr("xlink:href", "images/" + nodes[y].label + "2.jpg")
+        .attr("width", 30)
+        .attr("height", 30)
+        .attr("x", -4)
+        .attr("y", -5);
+    } else {
+      defs.append("svg:pattern")
         .attr("width", 1)
         .attr("height", 1)
         .attr("id", "image-" + nodes[y].label)
@@ -200,6 +212,7 @@ d3.csv("neighbors.csv", function(data) {
         .attr("height", 30)
         .attr("x", -4)
         .attr("y", -5);
+    }
   }
 
   var linkElements = svg.append("g")
