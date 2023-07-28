@@ -98,7 +98,8 @@ d3.csv("neighbors.csv", function(data) {
         id: i,
         group: 0,
         label: philosopher,
-        level: 1
+        level: 1,
+        visible: true
       });
       if (!(data[k].school in schools)) {
         schools[data[k].school] = [];
@@ -125,6 +126,7 @@ d3.csv("neighbors.csv", function(data) {
         label: keys[k],
         level: 1,
         collapsed: false,
+        visible: true
       });
     dictPhil[keys[k]] = i;
     i = i + 1;
@@ -279,6 +281,7 @@ d3.csv("neighbors.csv", function(data) {
               return node.id === neighborId;
             });
           deletedNodesDict[selectedNode].push(foundNode);
+          nodes[foundNode.id].visible = false;
           return {
             source: selectedNode,
             target: foundNode,
@@ -496,6 +499,9 @@ d3.csv("neighbors.csv", function(data) {
         // })
 
 
+        for (let i = 0; i < deletedNodesDict[selectedNode].length; i++) {
+          nodes[deletedNodesDict[selectedNode][i].id].visible = true;
+        }
 
         simulation.force("link").links(links)
 
@@ -509,6 +515,12 @@ d3.csv("neighbors.csv", function(data) {
 
     // we modify the styles to highlight selected nodes
     nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+    .style("visibility", function(node) {
+      if (!node.visible && node.group == 0) {
+        return "hidden";
+      }
+      return "visible";
+    });
     linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
   }
 
