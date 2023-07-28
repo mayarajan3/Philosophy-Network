@@ -330,6 +330,7 @@ var deletedLinksDict = {};
 
           }
         }
+        console.log(deletedLinksDict[selectedNode]);
 
         console.log(selectedNode);
         console.log("links");
@@ -384,7 +385,7 @@ var deletedLinksDict = {};
       } else {
         var newLinks = [];
         for (let i = 0; i < links.length; i++) {
-          if (!newLinksDict[selectedNode].includes(links[i])) {
+          if (!containsObject(links[i], newLinksDict[selectedNode])) {
             newLinks.push(links[i]);
           }
         }
