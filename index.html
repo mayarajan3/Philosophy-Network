@@ -146,8 +146,8 @@ d3.csv("neighbors.csv", function(data) {
     return value;
   });
 
-  var originalLinks = links;
-  var originalNodes = nodes;
+  var originalLinks = [...links];
+  var originalNodes = [...nodes];
 
   console.log(stringRepresentation);
   console.log(linkRepresentation);
@@ -350,6 +350,7 @@ d3.csv("neighbors.csv", function(data) {
         //for each neighbor link, determine where it should go
         console.log("step 1");
         console.log(newLinks);
+        var step2 = [];
         for (let j = 0; j < neighbors.length; j++) {
           let tempNeighbor = neighbors[j];
           for (let i = 0; i < originalLinks.length; i++) {
@@ -360,6 +361,7 @@ d3.csv("neighbors.csv", function(data) {
                 newLink.target = nodes[schoolId];
               }
               newLinks.push(newLink);
+              step2.push(newLink);
             } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
               console.log(originalLinks[i].source.label);
@@ -371,6 +373,7 @@ d3.csv("neighbors.csv", function(data) {
                 newLink.source = nodes[schoolId];
               }
               newLinks.push(newLink);
+              step2.push(newLink);
             }
           }
         }
