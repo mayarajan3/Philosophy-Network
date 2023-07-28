@@ -15,12 +15,11 @@
     left: 25%;
     top: 5%;
     text-align: center;
-
-    h3 {
+  }
+  h3 {
       font-size: 40px;
       font-weight: 200;
     }
-  }
 </style>
 
 <svg width="960" height="600">
@@ -141,7 +140,7 @@ d3.csv("neighbors.csv", function(data) {
             links.push({
             target: dictPhil[dictNeighbors[philosophers[k]][j]],
             source: dictPhil[philosophers[k]],
-            strength: 0.7
+            strength: 0.1
             });
           }
 
@@ -156,7 +155,7 @@ d3.csv("neighbors.csv", function(data) {
         links.push({
             target: dictPhil[philosopherSchools[j]],
             source: dictPhil[keys[k]],
-            strength: 0.7
+            strength: 0.1
             });
       }
     }
@@ -289,7 +288,7 @@ d3.csv("neighbors.csv", function(data) {
           return {
             source: selectedNode,
             target: foundNode,
-            strength: 0.7
+            strength: 0.1
           };
         });
 
