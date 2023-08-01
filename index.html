@@ -4,31 +4,66 @@
 <style>
 
   body {
-    background-image: url( 'images/paper_background.jpg' );
-    background-size: cover;
+  }
+
+  .container {
+    display: flex;
   }
 
   .title {
     position: absolute;
     z-index: -1;
     width: 50%;
-    left: 25%;
-    top: 5%;
+    margin-bottom: 2%;
+    top: 0px;
+    height: 15%;
+    margin-left:25%;
     text-align: center;
   }
   h3 {
-      font-size: 40px;
+      font-size: 5vh;
       font-weight: 200;
+      margin-bottom: 2%;
+      height: 15%;
+      margin-top: 3vw;
+
+    }
+
+    .info-box {
+      position: absolute;
+      width: 20%;
+      height: 80%;
+      border: 1px solid gray;
+      right: 5%;
+      top:15%;
+    }
+
+    svg {
+      background-image: url( 'images/paper_background.jpg' );
+      background-size: cover;
+      margin-left:5%;
+      border: 1px solid gray;
+      position: absolute;
+      top: 15%;
     }
 </style>
 
-<svg width="960" height="600">
+
+<div class="container">
   <div class="title">
-    <h3 id="school">Philosophy Network</h3>
-  </div>
-</svg>
+  <h3 id="school">Philosophy Network</h3>
+</div>
+  <svg></svg>
+  <div class="info-box">
+    <h3 id="info-title">Testing</h3>
+    <p id="info-text">Testing</p>
+</div>
+
+
+</div>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="variables.js"></script>
 <script>
 var nodes = [];
 var links = [];
@@ -179,11 +214,17 @@ d3.csv("neighbors.csv", function(data) {
   var originalNodes = [...nodes];
 
 
-  var width = window.innerWidth
-  var height = window.innerHeight
+
 
   var svg = d3.select('svg')
-  svg.attr('width', width).attr('height', height)
+  var width = window.innerWidth*0.65;
+  var height = window.innerHeight*0.8;
+  svg.attr("width",  window.innerWidth*0.65);
+  svg.attr("height", window.innerHeight*0.8);
+  console.log(width);
+  console.log(height);
+  var radius = 35;
+  // svg.attr('width', width).attr('height', height)
 
   var linkForce = d3
     .forceLink()
@@ -270,6 +311,9 @@ d3.csv("neighbors.csv", function(data) {
 
 
   function selectNode(selectedNode) {
+    document.getElementById("info-title").innerText = selectedNode.label;
+    document.getElementById("info-text").innerText = selectedNode.label;
+
     if (selectedNode.group == 1) {
       var label = selectedNode.label.replace("_", " ");
       label = label.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
@@ -455,10 +499,19 @@ d3.csv("neighbors.csv", function(data) {
       .attr("dx", 17)
       .attr("dy", 4)
 
-  simulation.nodes(nodes).on('tick', () => {
+
+  function draw() {
+    var upperBoundY = height - radius;
+    var lowerBoundY = radius;
+    var upperBoundX = width - radius;
+    var lowerBoundX = radius;
     nodeElements
-      .attr('cx', function (node) { return node.x || 0})
-      .attr('cy', function (node) { return node.y || 0})
+      .attr('cx', function (node) {
+        return node.x = Math.max(lowerBoundX, Math.min(upperBoundX, node.x));
+      })
+      .attr('cy', function (node) {
+        return node.y = Math.max(lowerBoundY, Math.min(upperBoundY, node.y));
+      })
     textElements
       .attr('x', function (node) { return node.x || 0})
       .attr('y', function (node) { return node.y || 0})
@@ -467,7 +520,9 @@ d3.csv("neighbors.csv", function(data) {
       .attr('y1', function (link) { return link.source.y || 0})
       .attr('x2', function (link) { return link.target.x || 0})
       .attr('y2', function (link) { return link.target.y || 0})
-  })
+  }
+  draw();
+  simulation.nodes(nodes).on('tick', draw);
 
 
   simulation.force("link").links(links)
