@@ -21,7 +21,10 @@
     height: 15%;
     margin-left:25%;
     text-align: center;
-    h3 {
+
+  }
+
+    .school-title {
       font-size: 5vh;
       font-weight: 200;
       margin-bottom: 2%;
@@ -29,8 +32,6 @@
       margin-top: 3vw;
 
     }
-  }
-
 
     .info-box {
       position: absolute;
@@ -40,17 +41,11 @@
       right: 5%;
       top:15%;
 
-      .info-title {
+    }
+    .info-title, .info-text {
+      white-space: pre-wrap;
         padding-bottom: 10px;
         padding-top: 10px;
-      }
-
-      h3, h4, p {
-        white-space: pre-wrap;
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-
     }
 
     svg {
@@ -66,12 +61,12 @@
 
 <div class="container">
   <div class="title">
-  <h3 id="school">Philosophy Network</h3>
+  <h3 class="school-title" id="school">Philosophy Network</h3>
 </div>
   <svg></svg>
   <div class="info-box">
     <h3 class="info-title" id="info-title">Testing</h3>
-    <p id="info-text">Testing</p>
+    <p class="info-text" id="info-text">Testing</p>
 </div>
 
 
@@ -104,7 +99,7 @@ function getNeighbors(node) {
 }
 
 function isNeighborLink(node, link) {
-  return link.target.id === node.id || link.source.id === node.id
+  return link.target.id == node.id || link.source.id == node.id
 }
 
 
@@ -130,6 +125,7 @@ function getNodeSize(node, neighbors) {
 }
 
 function getLinkColor(node, link) {
+  console.log(node);
   return isNeighborLink(node, link) ? '#161616' : '#cecece'
 }
 
