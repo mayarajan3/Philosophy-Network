@@ -328,7 +328,7 @@ d3.csv("neighbors.csv", function(data) {
     if (selectedNode.group == 1) {
       var label = selectedNode.label.replace("_", " ");
       label = label.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-      document.getElementById("info-title").innerText = "Title: " + label;
+      document.getElementById("info-title").innerText = label;
     } else {
       document.getElementById("info-title").innerText = selectedNode.label;
     }
