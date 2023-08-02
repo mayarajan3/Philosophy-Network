@@ -431,15 +431,15 @@ d3.csv("neighbors.csv", function(data) {
           for (let i = 0; i < originalLinks.length; i++) {
             if ((originalLinks[i].source == tempNeighbor) && (originalLinks[i].target != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
-              var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]]
-              if (nodes[schoolId].collapsed) {
+              var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]];
+              if (nodes[schoolId] && nodes[schoolId].collapsed) {
                 newLink.target = nodes[schoolId];
               }
               newLinks.push(newLink);
             } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
               var newLink = Object.assign({}, originalLinks[i]);
               var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
-              if (nodes[schoolId].collapsed) {
+              if (nodes[schoolId] && nodes[schoolId].collapsed) {
                 newLink.source = nodes[schoolId];
               }
               newLinks.push(newLink);
