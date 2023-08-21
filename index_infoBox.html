@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<style>
+
+  body {
+    background-image: url( 'images/scroll.jpg' );
+    background-size: cover;
+  }
+
+  .container {
+    display: flex;
+  }
+
+  .title {
+    position: absolute;
+    z-index: -1;
+    width: 50%;
+    margin-bottom: 2%;
+    top: 0px;
+    height: 15%;
+    margin-left:25%;
+    text-align: center;
+
+  }
+
+    .school-title {
+      font-size: 5vh;
+      font-weight: 200;
+      margin-bottom: 2%;
+      height: 15%;
+      margin-top: 3vw;
+
+    }
+
+    .info-box {
+      position: absolute;
+      width: 20%;
+      height: 80%;
+      border: 1px solid gray;
+      right: 5%;
+      top:15%;
+      background-image: url( 'images/paper_background.jpg' );
+      background-size: cover;
+
+    }
+    .info-title, .info-text {
+      white-space: pre-wrap;
+      padding: 10px;
+      margin: 0px;
+    }
+
+    svg {
+      background-image: url( 'images/paper_background.jpg' );
+      background-size: cover;
+      margin-left:5%;
+      border: 1px solid gray;
+      position: absolute;
+      top: 15%;
+    }
+</style>
+
+
+<div class="container">
+  <div class="title">
+  <h3 class="school-title" id="school">Philosophy Network</h3>
+</div>
+  <svg></svg>
+  <div class="info-box">
+    <h3 class="info-title" id="info-title">Testing</h3>
+    <p class="info-text" id="info-text">Testing</p>
+</div>
+
+
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="variables.js"></script>
+<script>
+var nodes = [];
+var links = [];
+let i = 0;
+var dictPhil = {};
+var dictNeighbors = {};
+var philosophers = [];
+var schools = {};
+var dictSchool = {};
+var schoolThreshold;
+
+function getNeighbors(node) {
+  return links.reduce(function (neighbors, link) {
+      if (link.target.id === node.id) {
+        neighbors.push(link.source.id)
+      } else if (link.source.id === node.id) {
+        neighbors.push(link.target.id)
+      }
+      return neighbors
+    },
+    [node.id]
+  )
+}
+
+function isNeighborLink(node, link) {
+  return link.target.id == node.id || link.source.id == node.id
+}
+
+
+function getNodeColor(node, neighbors) {
+  if (node.group == 0) {
+    return "url(#image-" + node.label + ")";
+  } else {
+    if (node.label == "aristotle" || node.label == "plato" || node.label == "nietzsche") {
+      return "url(#image-" + node.label + "2)";
+    } else {
+      return "url(#image-" + node.label + ")";
+    }
+  }
+
+}
+
+function getNodeSize(node, neighbors) {
+  if (node.group == 1) {
+    return 15;
+  } else {
+    return 10;
+  }
+}
+
+function getLinkColor(node, link) {
+  return isNeighborLink(node, link) ? '#161616' : '#cecece'
+}
+
+function getLinkWidth(node, link) {
+  return isNeighborLink(node, link) ? '2' : '1'
+}
+
+function getTextColor(node, neighbors) {
+  return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
+}
+
+d3.csv("neighbors.csv", function(data) {
+  for (var k = 0; k < data.length; k++) {
+      neighbors = data[k].neighbors;
+      philosopher = data[k].philosopher;
+      nodes.push({
+        id: i,
+        group: 0,
+        label: philosopher,
+        level: 1
+      });
+      if (!(data[k].school in schools)) {
+        schools[data[k].school] = [];
+      }
+      if (!schools[data[k].school].includes(philosopher)) {
+        schools[data[k].school].push(philosopher);
+      }
+      neighbors = neighbors.replace(/'/g, "\"");
+      neighbors = JSON.parse(neighbors);
+
+      dictPhil[philosopher] = i;
+      dictNeighbors[philosopher] = neighbors;
+      dictSchool[philosopher] = data[k].school;
+      philosophers.push(philosopher)
+      i = i + 1;
+  }
+  schoolThreshold = i;
+  const keys = Object.keys(schools);
+  for (var k = 0; k < keys.length; k++) {
+    nodes.push({
+        id: i,
+        group: 1,
+        label: keys[k],
+        level: 1,
+        collapsed: false
+      });
+    dictPhil[keys[k]] = i;
+    i = i + 1;
+  }
+  for (var k = 0; k < philosophers.length; k++) {
+    for (let j = 0; j < dictNeighbors[philosophers[k]].length; j++) {
+      if (dictNeighbors[philosophers[k]][j] !== philosophers[k]) {
+        if ((typeof dictPhil[dictNeighbors[philosophers[k]][j]] == 'number') && (typeof dictPhil[philosophers[k]] == 'number')) {
+          if (!(dictSchool[dictNeighbors[philosophers[k]][j]] == dictSchool[philosophers[k]])) {
+            links.push({
+            target: dictPhil[dictNeighbors[philosophers[k]][j]],
+            source: dictPhil[philosophers[k]],
+            strength: 0.1
+            });
+          }
+
+        }
+      }
+    }
+  }
+  for (var k = 0; k < keys.length; k++) {
+    var philosopherSchools = schools[keys[k]];
+    for (var j = 0; j < philosopherSchools.length; j++) {
+      if ((typeof dictPhil[philosopherSchools[j]] == 'number') && (typeof dictPhil[keys[k]] == 'number')) {
+        links.push({
+            target: dictPhil[philosopherSchools[j]],
+            source: dictPhil[keys[k]],
+            strength: 0.1
+            });
+      }
+    }
+  }
+
+  var nodeRepresentation = JSON.stringify(nodes, function(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      return JSON.stringify(value);
+    }
+    return value;
+  });
+
+  var linkRepresentation = JSON.stringify(links, function(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      return JSON.stringify(value);
+    }
+    return value;
+  });
+
+  console.log(nodeRepresentation);
+  console.log(linkRepresentation);
+
+  var originalLinks = [...links];
+  var originalNodes = [...nodes];
+
+
+
+
+  var svg = d3.select('svg')
+  var width = window.innerWidth*0.65;
+  var height = window.innerHeight*0.8;
+  svg.attr("width",  window.innerWidth*0.65);
+  svg.attr("height", window.innerHeight*0.8);
+  var radius = 35;
+  // svg.attr('width', width).attr('height', height)
+
+  var linkForce = d3
+    .forceLink()
+    .strength(function (link) { return link.strength })
+
+  var simulation = d3
+    .forceSimulation()
+    .force('link', linkForce)
+    .force('charge', d3.forceManyBody().strength(-50))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+
+  var dragDrop = d3.drag().on('start', function (node) {
+    node.fx = node.x || 0
+    node.fy = node.y || 0
+  }).on('drag', function (node) {
+    simulation.alphaTarget(0.7).restart()
+    node.fx = d3.event.x
+    node.fy = d3.event.y
+  }).on('end', function (node) {
+    if (!d3.event.active) {
+      simulation.alphaTarget(0)
+    }
+    node.fx = null
+    node.fy = null
+  })
+
+  for (let y = 0; y < nodes.length; y++) {
+    var defs = svg.append("svg:defs");
+    if (nodes[y].group == 1) {
+     defs.append("svg:pattern")
+        .attr("width", 1)
+        .attr("height", 1)
+        .attr("id", (nodes[y].label == "aristotle" || nodes[y].label == "plato" || nodes[y].label == "nietzsche") ? "image-" + nodes[y].label + "2" : "image-" + nodes[y].label)
+        .append("svg:image")
+        .attr("xlink:href", (nodes[y].label == "aristotle" || nodes[y].label == "plato" || nodes[y].label == "nietzsche") ? "images/" + nodes[y].label + "2.jpg" : "images/" + nodes[y].label + ".jpg")
+        .attr("width", 50)
+        .attr("height", 50)
+        .attr("x", -10)
+        .attr("y", -10);
+    } else {
+      defs.append("svg:pattern")
+        .attr("width", 1)
+        .attr("height", 1)
+        .attr("id", "image-" + nodes[y].label)
+        .append("svg:image")
+        .attr("xlink:href", "images/" + nodes[y].label + ".jpg")
+        .attr("width", 30)
+        .attr("height", 30)
+        .attr("x", -4)
+        .attr("y", -5);
+    }
+  }
+
+  var linkElements = svg.append("g")
+    .attr("class", "links")
+    .selectAll("line")
+    .data(links)
+    .enter().append("line")
+      .attr("stroke-width", 1)
+      .attr("stroke", "rgba(50, 50, 50, 0.2)")
+
+  var nodeElements = svg.append("g")
+    .attr("class", "nodes")
+    .selectAll("circle")
+    .data(nodes)
+    .enter().append("circle")
+      .attr("r", getNodeSize)
+      .attr("fill", getNodeColor)
+      .call(dragDrop)
+      .on('click', selectNode)
+      .attr("stroke-width", node => node.group == 1 ? 3 : 0)
+      .style("stroke", node => node.collapsed ? "black" : "gray");
+
+
+  function containsObject(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+        if ((list[i].target == obj.target && list[i].source == obj.source) || (list[i].source == obj.target && list[i].target == obj.source)) {
+            return true;
+        }
+    }
+    return false;
+  }
+
+
+  function selectNode(selectedNode) {
+    document.getElementById("info-text").innerText = "Additional information: (placeholder) " + selectedNode.label;
+
+    if (selectedNode.group == 1) {
+      var label = selectedNode.label.replace("_", " ");
+      label = label.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      document.getElementById("info-title").innerText = label;
+    } else {
+      document.getElementById("info-title").innerText = selectedNode.label;
+    }
+
+    var neighbors = getNeighbors(selectedNode);
+    if (selectedNode.group == 1 && selectedNode.collapsed == false) {
+
+        var primarySelectedNodeLinks = neighbors.map(function (neighborId) {
+          var foundNode = nodes.find(function (node) {
+              return node.id === neighborId;
+            });
+          return {
+            source: selectedNode,
+            target: foundNode,
+            strength: 0.1
+          };
+        });
+
+        var secondarySelectedNodeLinks = [];
+        for (let i = 0; i < neighbors.length; i++) {
+          var foundNode = nodes.find(function (node) {
+              return node.id === neighbors[i];
+            })
+          var secondaryNeighbors = getNeighbors(foundNode);
+          var temp = secondaryNeighbors.map(function (neighborId) {
+            return {
+              source: foundNode,
+              target: nodes.find(function (node) {
+                return node.id === neighborId;
+              }),
+              strength: 0.7
+            };
+          });
+          secondarySelectedNodeLinks = [...secondarySelectedNodeLinks, ...temp];
+        }
+        var newLinks = [];
+        for (let i = 0; i < links.length; i++) {
+          if (containsObject(links[i], primarySelectedNodeLinks)) {
+            // Ignore
+          } else if (containsObject(links[i], secondarySelectedNodeLinks)) {
+            var addedLink = Object.assign({}, links[i]);
+            if (neighbors.includes(addedLink.source.id)) {
+              addedLink.source = selectedNode;
+            } else {
+              addedLink.target = selectedNode;
+            }
+            newLinks.push(addedLink);
+          } else {
+            newLinks.push(links[i]);
+
+          }
+        }
+
+        links = newLinks;
+        linkElements = linkElements.data(newLinks);
+
+        linkElements.exit().remove();
+
+        linkElements = linkElements
+          .enter()
+          .append("line")
+          .attr("class", "link")
+          .attr("stroke-width", 1)
+          .attr("stroke", "rgba(50, 50, 50, 0.2)")
+          .merge(linkElements);
+
+          nodes[selectedNode.id].collapsed = true;
+
+
+      } else {
+
+        var newLinks = [];
+
+        var neighbors = []
+        for (let i = 0; i < originalLinks.length; i++) {
+          if (originalLinks[i].source == selectedNode) {
+            neighbors.push(originalLinks[i].target);
+          } else if (originalLinks[i].target == selectedNode) {
+            neighbors.push(originalLinks[i].source);
+          }
+        }
+        //not connected to neighbors or selected node
+        for (let i = 0; i < links.length; i++) {
+          if (links[i].source != selectedNode && links[i].target != selectedNode) {
+            var notIncluded = true;
+            for (let j = 0; j < neighbors.length; j++) {
+              if (links[i].source == neighbors[j] || links[i].target == neighbors[j] ) {
+                notIncluded = false;
+              }
+            }
+            if (notIncluded) {
+              newLinks.push(links[i]);
+            }
+
+          }
+        }
+
+        for (let j = 0; j < neighbors.length; j++) {
+          let tempNeighbor = neighbors[j];
+          for (let i = 0; i < originalLinks.length; i++) {
+            if ((originalLinks[i].source == tempNeighbor) && (originalLinks[i].target != selectedNode)) {
+              var newLink = Object.assign({}, originalLinks[i]);
+              var schoolId = dictPhil[dictSchool[originalLinks[i].target.label]];
+              if (nodes[schoolId] && nodes[schoolId].collapsed) {
+                newLink.target = nodes[schoolId];
+              }
+              newLinks.push(newLink);
+            } else if ((originalLinks[i].target == tempNeighbor) && (originalLinks[i].source != selectedNode)) {
+              var newLink = Object.assign({}, originalLinks[i]);
+              var schoolId = dictPhil[dictSchool[originalLinks[i].source.label]]
+              if (nodes[schoolId] && nodes[schoolId].collapsed) {
+                newLink.source = nodes[schoolId];
+              }
+              newLinks.push(newLink);
+            }
+          }
+        }
+
+        for (let i = 0; i < originalLinks.length; i++) {
+          if (originalLinks[i].source == selectedNode || originalLinks[i].target == selectedNode) {
+            newLinks.push(originalLinks[i]);
+          }
+        }
+
+        links = newLinks;
+
+        linkElements = linkElements.data(newLinks);
+
+        linkElements.exit().remove();
+
+        linkElements = linkElements
+          .enter()
+          .append("line")
+          .attr("class", "link")
+          .attr("stroke-width", 1)
+          .attr("stroke", "rgba(50, 50, 50, 0.2)")
+          .merge(linkElements);
+        nodes[selectedNode.id].collapsed = false;
+
+      }
+
+
+    simulation.alpha(1).restart();
+    neighbors = getNeighbors(selectedNode);
+
+    nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+    .style("visibility", function(node) {
+      for (let i = 0; i < links.length; i++) {
+        if (links[i].source == node || links[i].target == node) {
+          return "visible";
+        }
+      }
+      return "hidden";
+    })
+    .attr("stroke-width", node => node.group == 1 ? 3 : 0)
+    .style("stroke", node => node.collapsed ? "black" : "gray");
+
+    linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+    .attr('stroke-width', function(link) { return getLinkWidth(selectedNode, link) })
+  }
+
+
+
+  var textElements = svg.append("g")
+    .attr("class", "texts")
+    .selectAll("text")
+    .data(nodes)
+    .enter().append("text")
+      .text(function (node) {
+        if (node.group == 1) {
+          var label = node.label.replace("_", " ");
+          label = label.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+          return label;
+        } else {
+          return "";
+        }
+      })
+      .attr("font-size", 15)
+      .attr("dx", 17)
+      .attr("dy", 4)
+
+
+  function draw() {
+    var upperBoundY = height - radius;
+    var lowerBoundY = radius;
+    var upperBoundX = width - radius;
+    var lowerBoundX = radius;
+    nodeElements
+      .attr('cx', function (node) {
+        return node.x = Math.max(lowerBoundX, Math.min(upperBoundX, node.x));
+      })
+      .attr('cy', function (node) {
+        return node.y = Math.max(lowerBoundY, Math.min(upperBoundY, node.y));
+      })
+    textElements
+      .attr('x', function (node) { return node.x || 0})
+      .attr('y', function (node) { return node.y || 0})
+    linkElements
+      .attr('x1', function (link) { return link.source.x || 0})
+      .attr('y1', function (link) { return link.source.y || 0})
+      .attr('x2', function (link) { return link.target.x || 0})
+      .attr('y2', function (link) { return link.target.y || 0})
+  }
+  draw();
+  simulation.nodes(nodes).on('tick', draw);
+
+
+  simulation.force("link").links(links)
+});
+
+</script>
