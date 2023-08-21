@@ -318,15 +318,7 @@ d3.csv("neighbors.csv", function(data) {
 
 
   function selectNode(selectedNode) {
-    document.getElementById("info-text").innerText = "Additional information: (placeholder) " + selectedNode.label;
 
-    if (selectedNode.group == 1) {
-      var label = selectedNode.label.replace("_", " ");
-      label = label.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-      document.getElementById("info-title").innerText = label;
-    } else {
-      document.getElementById("info-title").innerText = selectedNode.label;
-    }
 
     var neighbors = getNeighbors(selectedNode);
     if (selectedNode.group == 1 && selectedNode.collapsed == false) {
